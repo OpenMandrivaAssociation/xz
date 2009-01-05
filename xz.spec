@@ -1,4 +1,4 @@
-%define	pre	alpha
+%define	pre	beta
 %define	major	2
 %define	lname	lzma
 %define libname %mklibname %{lname} %{major}
@@ -6,12 +6,11 @@
 
 Summary: 	LZMA utils
 Name: 		xz
-Version: 	4.999.6
-Release: 	%mkrel %{?pre:0.%{pre}.}6
+Version: 	4.999.7
+Release: 	%mkrel %{?pre:0.%{pre}.}1
 License: 	GPLv2+
 Group:		Archiving/Compression
 Source0:	http://tukaani.org/lzma/%{name}-%{version}%{?pre}.tar.lzma
-Source1:	lzme
 Patch0:		lzma-4.999.6alpha-bump-liblzma-major.patch
 Patch1:		xz-4.999.6alpha-text-tune.patch
 Obsoletes:	lzma <= %{version} lzma-utils <= %{version}
@@ -74,8 +73,6 @@ CFLAGS="%{optflags} -O3 -funroll-loops" \
 %install
 rm -rf %{buildroot}
 %makeinstall_std
-install -m755 %{SOURCE1} -D %{buildroot}%{_bindir}/lzme
-
 rm -f %{buildroot}%{_libdir}/*.la
 %find_lang %{name}
 
@@ -103,5 +100,5 @@ rm -rf %{buildroot}
 %{_includedir}/%{lname}/*.h
 %{_libdir}/*.so
 %{_libdir}/*.a
-%{_libdir}/pkgconfig/%{lname}.pc
+%{_libdir}/pkgconfig/lib%{lname}.pc
 
