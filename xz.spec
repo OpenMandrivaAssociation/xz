@@ -7,7 +7,7 @@
 Summary: 	LZMA utils
 Name: 		xz
 Version: 	4.999.7
-Release: 	%mkrel %{?pre:0.%{pre}.}1
+Release: 	%mkrel %{?pre:0.%{pre}.}2
 License: 	GPLv2+
 Group:		Archiving/Compression
 Source0:	http://tukaani.org/lzma/%{name}-%{version}%{?pre}.tar.lzma
