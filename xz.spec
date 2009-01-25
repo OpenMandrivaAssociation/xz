@@ -1,4 +1,3 @@
-%define	pre	beta
 %define	major	2
 %define	lname	lzma
 %define libname %mklibname %{lname} %{major}
@@ -6,11 +5,11 @@
 
 Summary: 	LZMA utils
 Name: 		xz
-Version: 	4.999.7
-Release: 	%mkrel %{?pre:0.%{pre}.}2
+Version: 	4.999.8beta
+Release: 	%mkrel 0.1
 License: 	GPLv2+
 Group:		Archiving/Compression
-Source0:	http://tukaani.org/lzma/%{name}-%{version}%{?pre}.tar.lzma
+Source0:	http://tukaani.org/lzma/%{name}-%{version}.tar.lzma
 Patch0:		lzma-4.999.6alpha-bump-liblzma-major.patch
 Patch1:		xz-4.999.6alpha-text-tune.patch
 Obsoletes:	lzma <= %{version} lzma-utils <= %{version}
@@ -61,7 +60,7 @@ Requires:	%{libname} = %{version}
 Devel libraries & headers for liblzma.
 
 %prep
-%setup -q -n %{name}-%{version}%{?pre}
+%setup -q
 %patch0 -p1 -b .bumpmajor~
 %patch1 -p1 -b .text_tune~
 
