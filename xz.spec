@@ -6,10 +6,11 @@
 Summary: 	LZMA utils
 Name: 		xz
 Version: 	4.999.8beta
-Release: 	%mkrel 0.1
+Release: 	%mkrel 0.2
 License: 	GPLv2+
 Group:		Archiving/Compression
 Source0:	http://tukaani.org/lzma/%{name}-%{version}.tar.lzma
+Source1:	xzme
 Patch0:		lzma-4.999.6alpha-bump-liblzma-major.patch
 Patch1:		xz-4.999.6alpha-text-tune.patch
 Obsoletes:	lzma <= %{version} lzma-utils <= %{version}
@@ -72,6 +73,8 @@ CFLAGS="%{optflags} -O3 -funroll-loops" \
 %install
 rm -rf %{buildroot}
 %makeinstall_std
+install -m755 %{SOURCE1} -D %{buildroot}%{_bindir}/xzme
+
 rm -f %{buildroot}%{_libdir}/*.la
 %find_lang %{name}
 
