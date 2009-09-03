@@ -5,14 +5,14 @@
 
 Summary: 	LZMA utils
 Name: 		xz
-Version: 	4.999.8beta
-Release: 	%mkrel 0.2
+Version: 	4.999.9beta
+Release: 	%mkrel 1
 License: 	GPLv2+
 Group:		Archiving/Compression
-Source0:	http://tukaani.org/lzma/%{name}-%{version}.tar.lzma
+Source0:	http://tukaani.org/lzma/%{name}-%{version}.tar.xz
 Source1:	xzme
-Patch0:		lzma-4.999.6alpha-bump-liblzma-major.patch
-Patch1:		xz-4.999.6alpha-text-tune.patch
+Patch0:		xz-4.999.9beta-bump-liblzma-major.patch
+Patch1:		xz-4.999.9beta-text-tune.patch
 Obsoletes:	lzma <= %{version} lzma-utils <= %{version}
 Provides:	lzma = %{version}-%{release} lzma-utils = %{version}-%{release}
 BuildRequires:	zlib-devel diffutils
