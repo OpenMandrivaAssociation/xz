@@ -3,7 +3,7 @@
 %define libname %mklibname %{lname} %{major}
 %define libdev  %mklibname -d %{lname}
 
-Summary: 	LZMA utils
+Summary: 	XZ utils
 Name: 		xz
 Version: 	4.999.9beta
 Release: 	%mkrel 1
@@ -20,10 +20,10 @@ URL:		http://tukaani.org/lzma/
 Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
-LZMA provides very high compression ratio and fast decompression. The
-core of the LZMA utils is Igor Pavlov's LZMA SDK containing the actual
+XZ provides very high compression ratio and fast decompression. The
+core of the XZ utils is Igor Pavlov's LZMA SDK containing the actual
 LZMA encoder/decoder. LZMA utils add a few scripts which provide
-gzip-like command line interface and a couple of other LZMA related
+gzip-like command line interface and a couple of other XZ related
 tools. Also provides:
 
 - Average compression ratio 30% better than that of gzip and 15%
@@ -42,7 +42,7 @@ tools. Also provides:
 - Very similar command line interface than what gzip and bzip2 have.
 
 %package -n	%{libname}
-Summary:	Libraries for decoding LZMA compression
+Summary:	Libraries for decoding XZ/LZMA compression
 Group:		System/Libraries
 License:	LGPLv2.1+
 
