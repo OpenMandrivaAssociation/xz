@@ -6,7 +6,7 @@
 Summary: 	XZ utils
 Name: 		xz
 Version: 	4.999.9beta
-Release: 	%mkrel 1
+Release: 	%mkrel 2
 License: 	GPLv2+
 Group:		Archiving/Compression
 Source0:	http://tukaani.org/lzma/%{name}-%{version}.tar.xz
