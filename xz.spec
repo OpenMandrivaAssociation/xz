@@ -1,18 +1,16 @@
-%define	major	2
+%define	major	5
 %define	lname	lzma
 %define libname %mklibname %{lname} %{major}
 %define libdev  %mklibname -d %{lname}
 
 Summary: 	XZ utils
 Name: 		xz
-Version: 	4.999.9beta
-Release: 	%mkrel 2
+Version: 	5.0.0
+Release: 	%mkrel 1
 License: 	GPLv2+
 Group:		Archiving/Compression
 Source0:	http://tukaani.org/lzma/%{name}-%{version}.tar.xz
 Source1:	xzme
-Patch0:		xz-4.999.9beta-bump-liblzma-major.patch
-Patch1:		xz-4.999.9beta-text-tune.patch
 Obsoletes:	lzma <= %{version} lzma-utils <= %{version}
 Provides:	lzma = %{version}-%{release} lzma-utils = %{version}-%{release}
 BuildRequires:	zlib-devel diffutils
@@ -62,8 +60,6 @@ Devel libraries & headers for liblzma.
 
 %prep
 %setup -q
-%patch0 -p1 -b .bumpmajor~
-%patch1 -p1 -b .text_tune~
 
 %build
 CFLAGS="%{optflags} -O3 -funroll-loops" \
