@@ -7,7 +7,7 @@ Summary: 	XZ utils
 Name: 		xz
 Version: 	5.0.0
 Release: 	%mkrel 2
-License: 	GPLv2+
+License: 	Public Domain
 Group:		Archiving/Compression
 Source0:	http://tukaani.org/lzma/%{name}-%{version}.tar.xz
 Source1:	xzme
@@ -43,7 +43,6 @@ tools. Also provides:
 %package -n	%{libname}
 Summary:	Libraries for decoding XZ/LZMA compression
 Group:		System/Libraries
-License:	LGPLv2.1+
 
 %description -n	%{libname}
 Libraries for decoding LZMA compression.
@@ -51,7 +50,6 @@ Libraries for decoding LZMA compression.
 %package -n	%{libdev}
 Summary:	Devel libraries & headers for liblzma
 Group:		Development/C
-License:	LGPLv2.1+
 Provides:	%{lname}-devel = %{version}-%{release}
 Provides:	lib%{lname}-devel = %{version}-%{release}
 Requires:	%{libname} = %{version}
