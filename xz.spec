@@ -6,11 +6,12 @@
 Summary: 	XZ utils
 Name: 		xz
 Version: 	5.0.0
-Release: 	%mkrel 1
+Release: 	%mkrel 2
 License: 	GPLv2+
 Group:		Archiving/Compression
 Source0:	http://tukaani.org/lzma/%{name}-%{version}.tar.xz
 Source1:	xzme
+Patch0:		xz-5.0.0-text-tune.patch
 Obsoletes:	lzma <= %{version} lzma-utils <= %{version}
 Provides:	lzma = %{version}-%{release} lzma-utils = %{version}-%{release}
 BuildRequires:	zlib-devel diffutils
@@ -60,6 +61,7 @@ Devel libraries & headers for liblzma.
 
 %prep
 %setup -q
+%patch0 -p1 -b .text~
 
 %build
 CFLAGS="%{optflags} -O3 -funroll-loops" \
