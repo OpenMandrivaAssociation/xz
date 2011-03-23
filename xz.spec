@@ -15,7 +15,7 @@ Patch0:		xz-5.0.0-text-tune.patch
 Obsoletes:	lzma <= %{version} lzma-utils <= %{version}
 Provides:	lzma = %{version}-%{release} lzma-utils = %{version}-%{release}
 BuildRequires:	zlib-devel diffutils
-URL:		http://tukaani.org/lzma/
+URL:		http://tukaani.org/xz/
 Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
