@@ -5,8 +5,8 @@
 
 Summary: 	XZ utils
 Name: 		xz
-Version: 	5.0.0
-Release: 	%mkrel 2
+Version: 	5.0.1
+Release: 	1
 License: 	Public Domain
 Group:		Archiving/Compression
 Source0:	http://tukaani.org/lzma/%{name}-%{version}.tar.xz
@@ -99,4 +99,3 @@ rm -rf %{buildroot}
 %{_libdir}/*.so
 %{_libdir}/*.a
 %{_libdir}/pkgconfig/lib%{lname}.pc
-
