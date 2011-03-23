@@ -17,7 +17,6 @@ Patch0:		xz-5.0.0-text-tune.patch
 # needed by check suite
 BuildRequires:	diffutils
 URL:		http://tukaani.org/xz/
-Buildroot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 XZ provides very high compression ratio and fast decompression. The
@@ -82,18 +81,14 @@ make check
 rm -rf %{buildroot}
 
 %files -f %{name}.lang
-%defattr(-,root,root)
 %doc README THANKS
 %{_bindir}/*
 %{_mandir}/man1/*
 
 %files -n %{libname}
-%defattr(-,root,root)
 %{_libdir}/lib*.so.%{major}*
 
 %files -n %{libdev}
-%defattr(644,root,root,755)
-%defattr(-,root,root)
 %{_includedir}/%{lname}.h
 %dir %{_includedir}/%{lname}
 %{_includedir}/%{lname}/*.h
