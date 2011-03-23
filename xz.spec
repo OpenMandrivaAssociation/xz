@@ -12,8 +12,8 @@ Group:		Archiving/Compression
 Source0:	http://tukaani.org/lzma/%{name}-%{version}.tar.xz
 Source1:	xzme
 Patch0:		xz-5.0.0-text-tune.patch
-Obsoletes:	lzma <= %{version} lzma-utils <= %{version}
-Provides:	lzma = %{version}-%{release} lzma-utils = %{version}-%{release}
+%rename		lzma
+%rename		lzma-utils
 # needed by check suite
 BuildRequires:	diffutils
 URL:		http://tukaani.org/xz/
