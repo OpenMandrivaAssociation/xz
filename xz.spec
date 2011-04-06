@@ -6,7 +6,7 @@
 Summary: 	XZ utils
 Name: 		xz
 Version: 	5.0.2
-Release: 	1
+Release: 	2
 License: 	Public Domain
 Group:		Archiving/Compression
 Source0:	http://tukaani.org/lzma/%{name}-%{version}.tar.xz
