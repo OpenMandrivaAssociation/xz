@@ -69,7 +69,6 @@ CFLAGS="%{optflags} -O3 -funroll-loops" \
 %make
 
 %install
-rm -rf %{buildroot}
 %makeinstall_std
 install -m755 %{SOURCE1} -D %{buildroot}%{_bindir}/xzme
 
@@ -78,9 +77,6 @@ rm -f %{buildroot}%{_libdir}/*.la
 
 %check
 make check
-
-%clean
-rm -rf %{buildroot}
 
 %files -f %{name}.lang
 %doc README THANKS
