@@ -12,6 +12,7 @@ Group:		Archiving/Compression
 Source0:	http://tukaani.org/lzma/%{name}-%{version}.tar.xz
 Source1:	xzme
 Patch0:		xz-5.0.0-text-tune.patch
+Patch1:		xz-5.0.2-fix-leak.patch
 %rename		lzma
 %rename		lzma-utils
 # needed by check suite
@@ -60,6 +61,7 @@ Devel libraries & headers for liblzma.
 %prep
 %setup -q
 %patch0 -p1 -b .text~
+%patch1 -p1 -b .leak~
 
 %build
 CFLAGS="%{optflags} -O3 -funroll-loops" \
