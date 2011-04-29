@@ -21,6 +21,12 @@ Patch2:		xz-5.0.2-open-missing-mode.patch
 %rename		lzma-utils
 # needed by check suite
 BuildRequires:	diffutils
+%if %{with uclibc}
+BuildRequires:	uClibc-devel
+%endif
+%if %{with diet}
+BuildRequires:	dietlibc-devel
+%endif
 URL:		http://tukaani.org/xz/
 
 %description
