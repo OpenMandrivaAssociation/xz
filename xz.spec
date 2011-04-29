@@ -3,10 +3,13 @@
 %define libname %mklibname %{lname} %{major}
 %define libdev  %mklibname -d %{lname}
 
+%bcond_without uclibc
+%bcond_without dietlibc
+
 Summary: 	XZ utils
 Name: 		xz
 Version: 	5.0.2
-Release: 	2
+Release: 	3
 License: 	Public Domain
 Group:		Archiving/Compression
 Source0:	http://tukaani.org/lzma/%{name}-%{version}.tar.xz
@@ -66,12 +69,56 @@ Devel libraries & headers for liblzma.
 %patch2 -p1 -b .mode~
 
 %build
+export CONFIGURE_TOP=`pwd`
+mkdir objs
+pushd objs
 CFLAGS="%{optflags} -O3 -funroll-loops" \
 %configure2_5x
 %make
+popd
+
+%if %{with dietlibc}
+mkdir objsdietlibc
+pushd objsdietlibc
+CFLAGS="-Os" CC="diet gcc" \
+%configure2_5x	--disable-shared \
+		--enable-static \
+		--disable-xz \
+		--disable-xzdec \
+		--disable-lzmadec \
+		--disable-lzmainfo \
+		--disable-lzma-links \
+		--disable-scripts
+%make
+popd
+%endif
+
+%if %{with uclibc}
+mkdir objsuclibc
+pushd objsuclibc
+CFLAGS="%{uclibc_cflags}" LDFLAGS="%{?ldflags}" CC="%{uclibc_cc}" \
+%configure2_5x	--disable-shared \
+		--enable-static \
+		--disable-xz \
+		--disable-xzdec \
+		--disable-lzmadec \
+		--disable-lzmainfo \
+		--disable-lzma-links \
+		--disable-scripts
+
+%make
+popd
+%endif
 
 %install
-%makeinstall_std
+%makeinstall_std -C objs
+%if %{with uclibc}
+install -D objsuclibc/src/liblzma/.libs/liblzma.a -D %{buildroot}%{uclibc_root}%{_libdir}/liblzma.a
+%endif
+%if %{with dietlibc}
+install -D objsdietlibc/src/liblzma/.libs/liblzma.a -D %{buildroot}%{_prefix}/lib/dietlibc/lib-%{_arch}/liblzma.a
+%endif
+
 install -m755 %{SOURCE1} -D %{buildroot}%{_bindir}/xzme
 
 rm -f %{buildroot}%{_libdir}/*.la
@@ -94,4 +141,10 @@ make check
 %{_includedir}/%{lname}/*.h
 %{_libdir}/*.so
 %{_libdir}/*.a
+%if %{with dietlibc}
+%{_prefix}/lib/dietlibc/lib-%{_arch}/liblzma.a
+%endif
+%if %{with uclibc}
+%{uclibc_root}%{_libdir}/liblzma.a
+%endif
 %{_libdir}/pkgconfig/lib%{lname}.pc
