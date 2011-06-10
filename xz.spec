@@ -9,7 +9,7 @@
 Summary: 	XZ utils
 Name: 		xz
 Version: 	5.0.3
-Release: 	1
+Release: 	2
 License: 	Public Domain
 Group:		Archiving/Compression
 Source0:	http://tukaani.org/xz/%{name}-%{version}.tar.xz
@@ -114,6 +114,11 @@ popd
 
 %install
 %makeinstall_std -C objs
+
+install -d %{buildroot}/%{_lib}
+mv %{buildroot}%{_libdir}/*.so.* %{buildroot}/%{_lib}/
+ln -sf ../../%{_lib}/liblzma.so.%{version} %{buildroot}%{_libdir}/liblzma.so
+
 %if %{with uclibc}
 install -D objsuclibc/src/liblzma/.libs/liblzma.a -D %{buildroot}%{uclibc_root}%{_libdir}/liblzma.a
 %endif
@@ -134,7 +139,7 @@ make check -C objs
 %{_mandir}/man1/*
 
 %files -n %{libname}
-%{_libdir}/lib*.so.%{major}*
+/%{_lib}/lib*.so.%{major}*
 
 %files -n %{libdev}
 %{_includedir}/%{lname}.h
