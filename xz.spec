@@ -28,26 +28,26 @@ BuildRequires:	dietlibc-devel
 URL:		http://tukaani.org/xz/
 
 %description
-XZ provides very high compression ratio and fast decompression. The
-core of the XZ utils is Igor Pavlov's LZMA SDK containing the actual
-LZMA encoder/decoder. LZMA utils add a few scripts which provide
-gzip-like command line interface and a couple of other XZ related
-tools. Also provides:
+XZ Utils is free general-purpose data compression software with high
+compression ratio. XZ Utils were written for POSIX-like systems, but also
+work on some not-so-POSIX systems.
+XZ Utils are the successor to LZMA Utils.
 
-- Average compression ratio 30% better than that of gzip and 15%
-  better than that of bzip2.
+The core of the XZ Utils compression code is based on LZMA SDK,
+but it has been modified quite a lot to be suitable for XZ Utils.
+The primary compression algorithm is currently LZMA2, which is used inside
+the .xz container format. With typical files, XZ Utils create 30 % smaller
+output than gzip and 15 % smaller output than bzip2.
 
-- Decompression speed is only little slower than that of gzip, being
-  two to five times faster than bzip2.
+XZ Utils consist of several components:
 
-- In fast mode, compresses faster than bzip2 with a comparable
-  compression ratio.
-
-- Achieving the best compression ratios takes four to even twelve
-  times longer than with bzip2. However. this doesn't affect
-  decompressing speed.
-
-- Very similar command line interface than what gzip and bzip2 have.
+* liblzma is a compression library with API similar to that of zlib.
+* xz is a command line tool with syntax similar to that of gzip.
+* xzdec is a decompression-only tool smaller than the full-featured xz tool.
+* A set of shell scripts (xzgrep, xzdiff, etc.) have been adapted from gzip to
+ease viewing, grepping, and comparing compressed files.
+* Emulation of command line tools of LZMA Utils eases transition from LZMA
+Utils to XZ Utils.
 
 %package -n	%{libname}
 Summary:	Libraries for decoding XZ/LZMA compression
