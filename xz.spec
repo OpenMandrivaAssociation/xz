@@ -1,4 +1,6 @@
 %define	major	5
+%define	minor	0
+%define	micro	99
 %define	lname	lzma
 %define libname %mklibname %{lname} %{major}
 %define libdev  %mklibname -d %{lname}
@@ -8,13 +10,13 @@
 
 Summary: 	XZ utils
 Name: 		xz
-Version: 	5.0.3
-Release: 	2
+Version: 	5.1.1
+Release: 	0.alpha.1
 License: 	Public Domain
 Group:		Archiving/Compression
-Source0:	http://tukaani.org/xz/%{name}-%{version}.tar.xz
+Source0:	http://tukaani.org/xz/%{name}-%{version}alpha.tar.xz
 Source1:	xzme
-Patch0:		xz-5.0.0-text-tune.patch
+Patch0:		xz-5.1.1alpha-text-tune.patch
 %rename		lzma
 %rename		lzma-utils
 # needed by check suite
@@ -67,7 +69,7 @@ Requires:	%{libname} = %{version}
 Devel libraries & headers for liblzma.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{version}alpha
 %patch0 -p1 -b .text~
 
 %build
@@ -139,7 +141,7 @@ make check -C objs
 %{_mandir}/man1/*
 
 %files -n %{libname}
-/%{_lib}/lib*.so.%{major}*
+/%{_lib}/lib*.so.%{major}.%{minor}.%{macro}
 
 %files -n %{libdev}
 %{_includedir}/%{lname}.h
