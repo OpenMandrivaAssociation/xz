@@ -141,6 +141,7 @@ make check -C objs
 %{_mandir}/man1/*
 
 %files -n %{libname}
+/%{_lib}/lib*.so.%{major}
 /%{_lib}/lib*.so.%{major}.%{minor}.%{micro}
 
 %files -n %{libdev}
