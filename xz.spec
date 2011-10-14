@@ -119,7 +119,7 @@ popd
 
 install -d %{buildroot}/%{_lib}
 mv %{buildroot}%{_libdir}/*.so.* %{buildroot}/%{_lib}/
-ln -sf ../../%{_lib}/liblzma.so.%{version} %{buildroot}%{_libdir}/liblzma.so
+ln -sf /%{_lib}/liblzma.so.%{major}.%{minor}.%{micro} %{buildroot}%{_libdir}/liblzma.so
 
 %if %{with uclibc}
 install -D objsuclibc/src/liblzma/.libs/liblzma.a -D %{buildroot}%{uclibc_root}%{_libdir}/liblzma.a
