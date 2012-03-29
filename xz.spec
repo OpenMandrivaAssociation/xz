@@ -150,7 +150,6 @@ make check -C objs
 %{_includedir}/%{lname}/*.h
 %{_libdir}/*.so
 %{_libdir}/*.a
-%{_libdir}/*.la
 %if %{with dietlibc}
 %{_prefix}/lib/dietlibc/lib-%{_arch}/liblzma.a
 %endif
