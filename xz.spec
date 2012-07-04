@@ -10,8 +10,8 @@
 
 Summary: 	XZ utils
 Name: 		xz
-Version: 	5.1.1
-Release: 	0.alpha.2
+Version: 	5.1.2
+Release: 	0.alpha.1
 License: 	Public Domain
 Group:		Archiving/Compression
 Source0:	http://tukaani.org/xz/%{name}-%{version}alpha.tar.xz
