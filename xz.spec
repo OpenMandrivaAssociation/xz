@@ -76,7 +76,7 @@ Devel libraries & headers for liblzma.
 export CONFIGURE_TOP=`pwd`
 mkdir objs
 pushd objs
-CFLAGS="%{optflags} -O3 -funroll-loops" \
+CFLAGS="%{optflags} -Ofast -funroll-loops" \
 %configure2_5x
 %make
 popd
