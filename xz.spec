@@ -157,11 +157,11 @@ make check -C objs
 %{_mandir}/man1/*
 
 %files -n %{libname}
-/%{_lib}/lib*.so.%{major}
+/%{_lib}/liblzma.so.%{major}*
 
 %if %{with uclibc}
 %files -n uclibc-%{libname}
-%{uclibc_root}/%{_lib}/lib*.so.%{major}*
+%{uclibc_root}/%{_lib}/liblzma.so.%{major}*
 %endif
 
 %files -n %{libdev}
