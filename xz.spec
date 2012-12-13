@@ -11,7 +11,7 @@
 Summary: 	XZ utils
 Name: 		xz
 Version: 	5.1.2
-Release: 	0.alpha.1
+Release: 	0.alpha.2
 License: 	Public Domain
 Group:		Archiving/Compression
 Source0:	http://tukaani.org/xz/%{name}-%{version}alpha.tar.xz
@@ -100,8 +100,8 @@ popd
 %if %{with uclibc}
 mkdir objsuclibc
 pushd objsuclibc
-CFLAGS="%{uclibc_cflags}" LDFLAGS="%{?ldflags}" CC="%{uclibc_cc}" \
-%configure2_5x	--disable-shared \
+%uclibc_configure \
+		--disable-shared \
 		--enable-static \
 		--disable-xz \
 		--disable-xzdec \
@@ -159,6 +159,9 @@ make check -C objs
 %{_libdir}/pkgconfig/lib%{lname}.pc
 
 %changelog
+* Thu Dec 13 2012 Per Øyvind Karlsen <peroyvind@mandriva.org> 5.1.2-0.alpha.2
+- use %uclibc_configure macro
+
 * Thu Jul 05 2012 Per Øyvind Karlsen <peroyvind@mandriva.org> 5.1.2-0.alpha.1
 + Revision: 808152
 - build with -Ofast
