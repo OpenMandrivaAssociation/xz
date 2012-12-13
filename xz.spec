@@ -58,12 +58,22 @@ Group:		System/Libraries
 %description -n	%{libname}
 Libraries for decoding LZMA compression.
 
+%package -n	uclibc-%{libname}
+Summary:	Libraries for decoding XZ/LZMA compression (uClibc build)
+Group:		System/Libraries
+
+%description -n	uclibc-%{libname}
+Libraries for decoding LZMA compression.
+
 %package -n	%{libdev}
 Summary:	Devel libraries & headers for liblzma
 Group:		Development/C
 Provides:	%{lname}-devel = %{version}-%{release}
 Provides:	lib%{lname}-devel = %{version}-%{release}
 Requires:	%{libname} = %{version}
+%if %{with uclibc}
+Requires:	uclibc-%{libname} = %{version}
+%endif
 
 %description -n %{libdev}
 Devel libraries & headers for liblzma.
@@ -101,7 +111,7 @@ popd
 mkdir objsuclibc
 pushd objsuclibc
 %uclibc_configure \
-		--disable-shared \
+		--enable-shared \
 		--enable-static \
 		--disable-xz \
 		--disable-xzdec \
@@ -115,18 +125,25 @@ popd
 %endif
 
 %install
-%makeinstall_std -C objs
-
-install -d %{buildroot}/%{_lib}
-mv %{buildroot}%{_libdir}/*.so.* %{buildroot}/%{_lib}/
-ln -sf /%{_lib}/liblzma.so.%{major}.%{minor}.%{micro} %{buildroot}%{_libdir}/liblzma.so
-
 %if %{with uclibc}
-install -D objsuclibc/src/liblzma/.libs/liblzma.a -D %{buildroot}%{uclibc_root}%{_libdir}/liblzma.a
+%makeinstall_std -C objsuclibc
+install -d %{buildroot}%{uclibc_root}/%{_lib}
+rm %{buildroot}%{uclibc_root}%{_libdir}/liblzma.so
+mv %{buildroot}%{uclibc_root}%{_libdir}/liblzma.so.%{major}* %{buildroot}%{uclibc_root}/%{_lib}
+ln -sr %{buildroot}%{uclibc_root}/%{_lib}/liblzma.so.%{major}.%{minor}.%{micro} %{buildroot}%{uclibc_root}%{_libdir}/liblzma.so
+rm -r %{buildroot}%{uclibc_root}%{_datadir} %{buildroot}%{uclibc_root}%{_libdir}/pkgconfig
 %endif
+
 %if %{with dietlibc}
 install -D objsdietlibc/src/liblzma/.libs/liblzma.a -D %{buildroot}%{_prefix}/lib/dietlibc/lib-%{_arch}/liblzma.a
 %endif
+
+%makeinstall_std -C objs
+
+install -d %{buildroot}/%{_lib}
+rm %{buildroot}%{_libdir}/liblzma.so
+mv %{buildroot}%{_libdir}/liblzma.so.%{major}* %{buildroot}/%{_lib}
+ln -sr %{buildroot}/%{_lib}/liblzma.so.%{major}.%{minor}.%{micro} %{buildroot}%{_libdir}/liblzma.so
 
 install -m755 %{SOURCE1} -D %{buildroot}%{_bindir}/xzme
 
@@ -144,22 +161,30 @@ make check -C objs
 /%{_lib}/lib*.so.%{major}
 /%{_lib}/lib*.so.%{major}.%{minor}.%{micro}
 
+%if %{with uclibc}
+%files -n uclibc-%{libname}
+%{uclibc_root}/%{_lib}/lib*.so.%{major}
+%{uclibc_root}/%{_lib}/lib*.so.%{major}.%{minor}.%{micro}
+%endif
+
 %files -n %{libdev}
 %{_includedir}/%{lname}.h
 %dir %{_includedir}/%{lname}
 %{_includedir}/%{lname}/*.h
-%{_libdir}/*.so
-%{_libdir}/*.a
+%{_libdir}/liblzma.so
+%{_libdir}/liblzma.a
 %if %{with dietlibc}
 %{_prefix}/lib/dietlibc/lib-%{_arch}/liblzma.a
 %endif
 %if %{with uclibc}
 %{uclibc_root}%{_libdir}/liblzma.a
+%{uclibc_root}%{_libdir}/liblzma.so
 %endif
 %{_libdir}/pkgconfig/lib%{lname}.pc
 
 %changelog
 * Thu Dec 13 2012 Per Øyvind Karlsen <peroyvind@mandriva.org> 5.1.2-0.alpha.2
+- build uClibc shared library
 - use %uclibc_configure macro
 
 * Thu Jul 05 2012 Per Øyvind Karlsen <peroyvind@mandriva.org> 5.1.2-0.alpha.1
