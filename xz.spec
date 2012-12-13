@@ -1,6 +1,4 @@
 %define	major	5
-%define	minor	0
-%define	micro	99
 %define	lname	lzma
 %define libname %mklibname %{lname} %{major}
 %define libdev  %mklibname -d %{lname}
@@ -83,32 +81,10 @@ Devel libraries & headers for liblzma.
 %patch0 -p1 -b .text~
 
 %build
-export CONFIGURE_TOP=`pwd`
-mkdir objs
-pushd objs
-CFLAGS="%{optflags} -Ofast -funroll-loops" \
-%configure2_5x
-%make
-popd
-
-%if %{with dietlibc}
-mkdir objsdietlibc
-pushd objsdietlibc
-CFLAGS="-Os" CC="diet gcc" \
-%configure2_5x	--disable-shared \
-		--enable-static \
-		--disable-xz \
-		--disable-xzdec \
-		--disable-lzmadec \
-		--disable-lzmainfo \
-		--disable-lzma-links \
-		--disable-scripts
-%make
-popd
-%endif
+export CONFIGURE_TOP="$PWD"
 
 %if %{with uclibc}
-mkdir objsuclibc
+mkdir -p objsuclibc
 pushd objsuclibc
 %uclibc_configure \
 		--enable-shared \
@@ -124,13 +100,36 @@ pushd objsuclibc
 popd
 %endif
 
+%if %{with dietlibc}
+mkdir -p objsdietlibc
+pushd objsdietlibc
+CFLAGS="-Os" CC="diet gcc" \
+%configure2_5x	--disable-shared \
+		--enable-static \
+		--disable-xz \
+		--disable-xzdec \
+		--disable-lzmadec \
+		--disable-lzmainfo \
+		--disable-lzma-links \
+		--disable-scripts
+%make
+popd
+%endif
+
+mkdir -p objs
+pushd objs
+CFLAGS="%{optflags} -Ofast -funroll-loops" \
+%configure2_5x
+%make
+popd
+
 %install
 %if %{with uclibc}
 %makeinstall_std -C objsuclibc
 install -d %{buildroot}%{uclibc_root}/%{_lib}
 rm %{buildroot}%{uclibc_root}%{_libdir}/liblzma.so
 mv %{buildroot}%{uclibc_root}%{_libdir}/liblzma.so.%{major}* %{buildroot}%{uclibc_root}/%{_lib}
-ln -sr %{buildroot}%{uclibc_root}/%{_lib}/liblzma.so.%{major}.%{minor}.%{micro} %{buildroot}%{uclibc_root}%{_libdir}/liblzma.so
+ln -sr %{buildroot}%{uclibc_root}/%{_lib}/liblzma.so.%{major}.* %{buildroot}%{uclibc_root}%{_libdir}/liblzma.so
 rm -r %{buildroot}%{uclibc_root}%{_datadir} %{buildroot}%{uclibc_root}%{_libdir}/pkgconfig
 %endif
 
@@ -143,7 +142,7 @@ install -D objsdietlibc/src/liblzma/.libs/liblzma.a -D %{buildroot}%{_prefix}/li
 install -d %{buildroot}/%{_lib}
 rm %{buildroot}%{_libdir}/liblzma.so
 mv %{buildroot}%{_libdir}/liblzma.so.%{major}* %{buildroot}/%{_lib}
-ln -sr %{buildroot}/%{_lib}/liblzma.so.%{major}.%{minor}.%{micro} %{buildroot}%{_libdir}/liblzma.so
+ln -sr %{buildroot}/%{_lib}/liblzma.so.%{major}.* %{buildroot}%{_libdir}/liblzma.so
 
 install -m755 %{SOURCE1} -D %{buildroot}%{_bindir}/xzme
 
@@ -159,12 +158,10 @@ make check -C objs
 
 %files -n %{libname}
 /%{_lib}/lib*.so.%{major}
-/%{_lib}/lib*.so.%{major}.%{minor}.%{micro}
 
 %if %{with uclibc}
 %files -n uclibc-%{libname}
-%{uclibc_root}/%{_lib}/lib*.so.%{major}
-%{uclibc_root}/%{_lib}/lib*.so.%{major}.%{minor}.%{micro}
+%{uclibc_root}/%{_lib}/lib*.so.%{major}*
 %endif
 
 %files -n %{libdev}
