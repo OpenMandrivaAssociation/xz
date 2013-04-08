@@ -1,16 +1,16 @@
-%define	major	5
-%define	lname	lzma
+%define major 5
+%define lname lzma
 %define libname %mklibname %{lname} %{major}
-%define libdev  %mklibname -d %{lname}
+%define libdev %mklibname -d %{lname}
 
 %bcond_without uclibc
 %bcond_without dietlibc
 
-Summary: 	XZ utils
-Name: 		xz
-Version: 	5.1.2
-Release: 	0.alpha.2
-License: 	Public Domain
+Summary:	XZ utils
+Name:		xz
+Version:	5.1.2
+Release:	0.alpha.3
+License:	Public Domain
 Group:		Archiving/Compression
 Source0:	http://tukaani.org/xz/%{name}-%{version}alpha.tar.xz
 Source1:	xzme
