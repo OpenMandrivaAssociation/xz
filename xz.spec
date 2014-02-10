@@ -122,7 +122,7 @@ popd
 mkdir -p objs
 pushd objs
 CFLAGS="%{optflags} -Ofast -funroll-loops" \
-%configure2_5x
+%configure2_5x	--enable-static
 %make
 popd
 
@@ -172,6 +172,7 @@ make check -C objs
 %dir %{_includedir}/%{lname}
 %{_includedir}/%{lname}/*.h
 %{_libdir}/liblzma.so
+%{_libdir}/liblzma.a
 %if %{with dietlibc}
 %{_prefix}/lib/dietlibc/lib-%{_arch}/liblzma.a
 %endif
