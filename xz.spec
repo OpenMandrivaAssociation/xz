@@ -8,15 +8,14 @@
 
 Summary:	XZ utils
 Name:		xz
-Version:	5.1.2
+Version:	5.1.3
 Release:	0.alpha.3
 License:	Public Domain
 Group:		Archiving/Compression
 Source0:	http://tukaani.org/xz/%{name}-%{version}alpha.tar.xz
 Source1:	xzme
-Patch0:		xz-5.1.1alpha-text-tune.patch
-Patch1:		xz-5.1.2alpha-man-page-day.patch
-Patch2:		xz-5.1.2alpha-xzgrep-and-h-option.patch	
+Patch0:		xz-5.1.3alpha-text-tune.patch
+Patch1:		xz-5.1.3alpha-man-page-day.patch
 %rename		lzma
 %rename		lzma-utils
 # needed by check suite
@@ -81,8 +80,7 @@ Devel libraries & headers for liblzma.
 %prep
 %setup -q -n %{name}-%{version}alpha
 %patch0 -p1 -b .text~
-%patch1 -p1 -b .day
-%patch2 -p1 -b .h
+%patch1 -p1 -b .day~
 
 %build
 export CONFIGURE_TOP="$PWD"

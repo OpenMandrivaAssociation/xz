@@ -1,8 +1,6 @@
-diff --git a/src/xz/message.c b/src/xz/message.c
-index abbd171..ce953ac 100644
---- a/src/xz/message.c
-+++ b/src/xz/message.c
-@@ -1110,7 +1110,8 @@ message_help(bool long_help)
+--- xz-5.1.3alpha/src/xz/message.c.day	2013-10-26 12:27:12.000000000 +0200
++++ xz-5.1.3alpha/src/xz/message.c	2014-02-10 12:58:14.957708913 +0100
+@@ -1090,7 +1090,8 @@ message_help(bool long_help)
  
  	puts(_(
  "  -z, --compress      force compression\n"
@@ -12,7 +10,7 @@ index abbd171..ce953ac 100644
  "  -t, --test          test compressed file integrity\n"
  "  -l, --list          list information about .xz files"));
  
-@@ -1120,7 +1121,8 @@ message_help(bool long_help)
+@@ -1100,7 +1101,8 @@ message_help(bool long_help)
  	puts(_(
  "  -k, --keep          keep (don't delete) input files\n"
  "  -f, --force         force overwrite of output file and (de)compress links\n"
@@ -22,18 +20,7 @@ index abbd171..ce953ac 100644
  
  	if (long_help) {
  		puts(_(
-@@ -1152,6 +1154,10 @@ message_help(bool long_help)
- "  -e, --extreme       try to improve compression ratio by using more CPU time;\n"
- "                      does not affect decompressor memory requirements"));
- 
-+	puts(_(
-+"  -T, --threads=NUM   use at most NUM threads; the default is 1; set to 0\n"
-+"                      to use the number of processor cores"));
-+
- 	if (long_help) {
- 		// FIXME? Mention something about threading?
- 		puts(_(
-@@ -1166,7 +1172,7 @@ message_help(bool long_help)
+@@ -1150,7 +1152,7 @@ message_help(bool long_help)
  		puts(_( // xgettext:no-c-format
  "      --memlimit-compress=LIMIT\n"
  "      --memlimit-decompress=LIMIT\n"
@@ -42,11 +29,9 @@ index abbd171..ce953ac 100644
  "                      set memory usage limit for compression, decompression,\n"
  "                      or both; LIMIT is in bytes, % of RAM, or 0 for defaults"));
  
-diff --git a/src/xz/xz.1 b/src/xz/xz.1
-index 0368f05..e5da140 100644
---- a/src/xz/xz.1
-+++ b/src/xz/xz.1
-@@ -912,7 +912,7 @@ See
+--- xz-5.1.3alpha/src/xz/xz.1.day	2013-10-26 12:27:12.000000000 +0200
++++ xz-5.1.3alpha/src/xz/xz.1	2014-02-10 12:58:14.957708913 +0100
+@@ -972,7 +972,7 @@ See
  for possible ways to specify the
  .IR limit .
  .TP
@@ -55,19 +40,16 @@ index 0368f05..e5da140 100644
  This is equivalent to specifying \fB\-\-memlimit\-compress=\fIlimit
  \fB\-\-memlimit\-decompress=\fIlimit\fR.
  .TP
-diff --git a/src/xzdec/xzdec.c b/src/xzdec/xzdec.c
-index b7830db..48ac1fe 100644
---- a/src/xzdec/xzdec.c
-+++ b/src/xzdec/xzdec.c
-@@ -64,13 +64,15 @@ help(void)
- "Usage: %s [OPTION]... [FILE]...\n"
- "Uncompress files in the ." TOOL_FORMAT " format to the standard output.\n"
+--- xz-5.1.3alpha/src/xzdec/xzdec.c.day	2014-02-10 12:58:14.957708913 +0100
++++ xz-5.1.3alpha/src/xzdec/xzdec.c	2014-02-10 13:02:37.107709989 +0100
+@@ -65,12 +65,16 @@ help(void)
+ "Decompress files in the ." TOOL_FORMAT " format to standard output.\n"
  "\n"
--"  -c, --stdout       (ignored)\n"
--"  -d, --decompress   (ignored)\n"
--"  -k, --keep         (ignored)\n"
+ "  -d, --decompress   (ignored, only decompression is supported)\n"
+-"  -k, --keep         (ignored, files are never deleted)\n"
+-"  -c, --stdout       (ignored, output is always written to standard output)\n"
  "  -q, --quiet        specify *twice* to suppress errors\n"
--"  -Q, --no-warn      (ignored)\n"
+-"  -Q, --no-warn      (ignored, the exit status 2 is never used)\n"
  "  -h, --help         display this help and exit\n"
  "  -V, --version      display the version number and exit\n"
 +"  -c, --stdout, --to-stdout\n"
@@ -76,6 +58,7 @@ index b7830db..48ac1fe 100644
 +"                     ignored, only decompression is supported\n"
 +"  -k, --keep         ignored, we never create/remove any files\n"
 +"  -Q, --no-warn      ignored, we never use exit status 2\n"
++
  "\n"
  "With no FILE, or when FILE is -, read standard input.\n"
  "\n"
