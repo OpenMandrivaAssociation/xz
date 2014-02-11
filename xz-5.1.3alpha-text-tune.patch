@@ -121,3 +121,13 @@
  /// Add a filter to the custom filter chain
  extern void coder_add_filter(lzma_vli id, void *options);
  
+--- xz-5.1.3alpha/tests/test_compress.sh.text~	2014-02-11 13:03:45.431535071 +0100
++++ xz-5.1.3alpha/tests/test_compress.sh	2014-02-11 15:33:40.012017357 +0100
+@@ -103,6 +103,7 @@ do
+ 
+ 	# Don't test with empty arguments; it breaks some ancient
+ 	# proprietary /bin/sh versions due to $@ used in test_xz().
++	test_xz -0 --text
+ 	test_xz -1
+ 	test_xz -2
+ 	test_xz -3
