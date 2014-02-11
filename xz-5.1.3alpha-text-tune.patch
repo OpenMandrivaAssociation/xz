@@ -1,5 +1,5 @@
---- xz-5.1.3alpha/src/liblzma/api/lzma/container.h.text~	2013-10-26 12:27:12.000000000 +0200
-+++ xz-5.1.3alpha/src/liblzma/api/lzma/container.h	2014-02-10 11:11:05.887682532 +0100
+--- xz-5.1.3alpha/src/liblzma/api/lzma/container.h.text~	2014-02-10 20:53:46.000000000 +0100
++++ xz-5.1.3alpha/src/liblzma/api/lzma/container.h	2014-02-11 11:58:23.406404399 +0100
 @@ -43,7 +43,7 @@
  /*
   * Preset flags
@@ -22,8 +22,8 @@
  
  #ifdef LZMA_UNSTABLE /* Unstable API that may change. Use only for testing. */
  /**
---- xz-5.1.3alpha/src/liblzma/lzma/lzma_encoder_presets.c.text~	2013-10-26 12:27:12.000000000 +0200
-+++ xz-5.1.3alpha/src/liblzma/lzma/lzma_encoder_presets.c	2014-02-10 11:11:05.887682532 +0100
+--- xz-5.1.3alpha/src/liblzma/lzma/lzma_encoder_presets.c.text~	2014-02-10 20:53:46.000000000 +0100
++++ xz-5.1.3alpha/src/liblzma/lzma/lzma_encoder_presets.c	2014-02-11 11:58:23.406404399 +0100
 @@ -18,7 +18,7 @@ lzma_lzma_preset(lzma_options_lzma *opti
  {
  	const uint32_t level = preset & LZMA_PRESET_LEVEL_MASK;
@@ -33,7 +33,7 @@
  
  	if (level > 9 || (flags & ~supported_flags))
  		return true;
-@@ -57,5 +57,18 @@ lzma_lzma_preset(lzma_options_lzma *opti
+@@ -59,5 +59,18 @@ lzma_lzma_preset(lzma_options_lzma *opti
  		}
  	}
  
@@ -52,8 +52,8 @@
 +
  	return false;
  }
---- xz-5.1.3alpha/src/xz/args.c.text~	2013-10-26 12:27:12.000000000 +0200
-+++ xz-5.1.3alpha/src/xz/args.c	2014-02-10 11:13:06.247683026 +0100
+--- xz-5.1.3alpha/src/xz/args.c.text~	2014-02-10 20:53:46.000000000 +0100
++++ xz-5.1.3alpha/src/xz/args.c	2014-02-11 12:12:51.916381380 +0100
 @@ -141,6 +141,7 @@ parse_real(args_info *args, int argc, ch
  		OPT_INFO_MEMORY,
  		OPT_ROBOT,
@@ -71,8 +71,19 @@
  
  		// Filters
  		{ "lzma1",        optional_argument, NULL,  OPT_LZMA1 },
---- xz-5.1.3alpha/src/xz/coder.c.text~	2013-10-26 12:27:12.000000000 +0200
-+++ xz-5.1.3alpha/src/xz/coder.c	2014-02-10 12:56:04.527708378 +0100
+@@ -490,6 +493,10 @@ parse_real(args_info *args, int argc, ch
+ 					optarg, 0, UINT64_MAX);
+ 			break;
+ 
++		case OPT_TEXT:
++			coder_set_text();
++			break;
++
+ 		default:
+ 			message_try_help();
+ 			tuklib_exit(E_ERROR, E_ERROR, false);
+--- xz-5.1.3alpha/src/xz/coder.c.text~	2014-02-10 20:53:46.000000000 +0100
++++ xz-5.1.3alpha/src/xz/coder.c	2014-02-11 11:58:23.406404399 +0100
 @@ -59,6 +59,8 @@ static lzma_mt mt_options = {
  };
  #endif
@@ -98,8 +109,8 @@
  
  
  extern void
---- xz-5.1.3alpha/src/xz/coder.h.text~	2013-10-26 12:27:12.000000000 +0200
-+++ xz-5.1.3alpha/src/xz/coder.h	2014-02-10 11:11:05.887682532 +0100
+--- xz-5.1.3alpha/src/xz/coder.h.text~	2014-02-10 20:53:46.000000000 +0100
++++ xz-5.1.3alpha/src/xz/coder.h	2014-02-11 11:58:23.406404399 +0100
 @@ -61,6 +61,9 @@ extern void coder_set_preset(uint32_t ne
  /// Enable extreme mode
  extern void coder_set_extreme(void);
