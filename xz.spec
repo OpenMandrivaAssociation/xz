@@ -124,7 +124,7 @@ mkdir -p objs
 pushd objs
 CFLAGS="%{optflags} -Ofast -funroll-loops" \
 %configure2_5x \
-		--dsiable-static
+		--disable-static
 %make
 popd
 
