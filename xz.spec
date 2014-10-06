@@ -24,7 +24,7 @@ BuildRequires:	diffutils
 %if %{with uclibc}
 BuildRequires:	uClibc-devel
 %endif
-%if %{with diet}
+%if %{with dietlibc}
 BuildRequires:	dietlibc-devel
 %endif
 URL:		http://tukaani.org/xz/
