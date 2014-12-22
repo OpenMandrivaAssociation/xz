@@ -8,14 +8,19 @@
 
 Summary:	XZ utils
 Name:		xz
-Version:	5.1.4
-%define	gitdate	20140914
-Release:	0.beta.3.%{gitdate}.1
+Version:	5.2.0
+%define	gitdate	%{nil}
+%if "%{gitdate}" != ""
+Release:	0.beta.%{gitdate}.1
+Source0:	http://tukaani.org/xz/%{name}-%{version}beta.tar.xz
+%else
+Release:	1
+Source0:	http://tukaani.org/xz/%{name}-%{version}.tar.xz
+%endif
 License:	Public Domain
 Group:		Archiving/Compression
-Source0:	http://tukaani.org/xz/%{name}-%{version}beta.tar.xz
 Source1:	xzme
-Patch0:		xz-5.1.4beta-text-tune.patch
+Patch0:		xz-5.2.0-text-tune.patch
 Patch1:		xz-5.1.3alpha-man-page-day.patch
 %rename		lzma
 %rename		lzma-utils
@@ -79,7 +84,11 @@ Requires:	uclibc-%{libname} = %{version}
 Devel libraries & headers for liblzma.
 
 %prep
+%if "%{gitdate}" != ""
 %setup -q -n %{name}-%{version}beta
+%else
+%setup -q
+%endif
 %patch0 -p1 -b .text~
 %patch1 -p1 -b .day~
 

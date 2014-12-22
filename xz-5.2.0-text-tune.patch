@@ -1,0 +1,115 @@
+--- xz-5.2.0/src/liblzma/api/lzma/container.h.text~	2014-12-21 19:49:36.000000000 +0100
++++ xz-5.2.0/src/liblzma/api/lzma/container.h	2014-12-22 11:17:52.108011177 +0100
+@@ -43,7 +43,7 @@
+ /*
+  * Preset flags
+  *
+- * Currently only one flag is defined.
++ * Currently only two flags are defined.
+  */
+ 
+ /**
+@@ -59,6 +59,13 @@
+  */
+ #define LZMA_PRESET_EXTREME       (UINT32_C(1) << 31)
+ 
++/**
++ * \brief       Text compression preset
++ *
++ * This flag modifies the preset to optimize the encoding for text files.
++ */
++#define LZMA_PRESET_TEXT          (UINT32_C(1) << 18)
++
+ 
+ /**
+  * \brief       Multithreading options
+--- xz-5.2.0/src/liblzma/lzma/lzma_encoder_presets.c.text~	2014-12-21 19:49:36.000000000 +0100
++++ xz-5.2.0/src/liblzma/lzma/lzma_encoder_presets.c	2014-12-22 11:16:25.754040526 +0100
+@@ -18,7 +18,7 @@ lzma_lzma_preset(lzma_options_lzma *opti
+ {
+ 	const uint32_t level = preset & LZMA_PRESET_LEVEL_MASK;
+ 	const uint32_t flags = preset & ~LZMA_PRESET_LEVEL_MASK;
+-	const uint32_t supported_flags = LZMA_PRESET_EXTREME;
++	const uint32_t supported_flags = LZMA_PRESET_EXTREME | LZMA_PRESET_TEXT;
+ 
+ 	if (level > 9 || (flags & ~supported_flags))
+ 		return true;
+@@ -59,5 +59,18 @@ lzma_lzma_preset(lzma_options_lzma *opti
+ 		}
+ 	}
+ 
++	if (flags & LZMA_PRESET_TEXT) {
++		if (level == 0)
++			options->lc = 3;
++		else
++			options->lc = 4;
++		options->lp = 0;
++		options->pb = 0;
++		options->mode = LZMA_MODE_NORMAL;
++		options->nice_len = 273;
++		options->mf = LZMA_MF_BT4;
++		options->depth = 512;
++	}
++
+ 	return false;
+ }
+--- xz-5.2.0/src/xz/args.c.text~	2014-12-21 19:49:36.000000000 +0100
++++ xz-5.2.0/src/xz/args.c	2014-12-22 11:16:25.754040526 +0100
+@@ -143,6 +143,7 @@ parse_real(args_info *args, int argc, ch
+ 		OPT_ROBOT,
+ 		OPT_FLUSH_TIMEOUT,
+ 		OPT_IGNORE_CHECK,
++		OPT_TEXT,
+ 	};
+ 
+ 	static const char short_opts[]
+@@ -185,6 +186,8 @@ parse_real(args_info *args, int argc, ch
+ 		{ "extreme",      no_argument,       NULL,  'e' },
+ 		{ "fast",         no_argument,       NULL,  '0' },
+ 		{ "best",         no_argument,       NULL,  '9' },
++		{ "text",         no_argument,       NULL,  OPT_TEXT },
++
+ 
+ 		// Filters
+ 		{ "lzma1",        optional_argument, NULL,  OPT_LZMA1 },
+@@ -497,6 +500,10 @@ parse_real(args_info *args, int argc, ch
+ 					optarg, 0, UINT64_MAX);
+ 			break;
+ 
++		case OPT_TEXT:
++			coder_set_text();
++			break;
++
+ 		default:
+ 			message_try_help();
+ 			tuklib_exit(E_ERROR, E_ERROR, false);
+--- xz-5.2.0/src/xz/coder.c.text~	2014-12-21 19:49:36.000000000 +0100
++++ xz-5.2.0/src/xz/coder.c	2014-12-22 11:16:25.754040526 +0100
+@@ -104,6 +104,15 @@ coder_set_extreme(void)
+ 
+ 
+ extern void
++coder_set_text(void)
++{
++	preset_number |= LZMA_PRESET_TEXT;
++	forget_filter_chain();
++	return;
++}
++
++
++extern void
+ coder_add_filter(lzma_vli id, void *options)
+ {
+ 	if (filters_count == LZMA_FILTERS_MAX)
+--- xz-5.2.0/src/xz/coder.h.text~	2014-12-21 19:49:36.000000000 +0100
++++ xz-5.2.0/src/xz/coder.h	2014-12-22 11:16:25.754040526 +0100
+@@ -61,6 +61,9 @@ extern void coder_set_preset(uint32_t ne
+ /// Enable extreme mode
+ extern void coder_set_extreme(void);
+ 
++/// Enable text mode
++extern void coder_set_text(void);
++
+ /// Add a filter to the custom filter chain
+ extern void coder_add_filter(lzma_vli id, void *options);
+ 
