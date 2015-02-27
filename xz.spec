@@ -8,7 +8,7 @@
 
 Summary:	XZ utils
 Name:		xz
-Version:	5.2.0
+Version:	5.2.1
 %define	gitdate	%{nil}
 %if "%{gitdate}" != ""
 Release:	0.beta.%{gitdate}.1
