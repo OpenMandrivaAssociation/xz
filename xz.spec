@@ -14,7 +14,7 @@ Version:	5.2.1
 Release:	0.beta.%{gitdate}.1
 Source0:	http://tukaani.org/xz/%{name}-%{version}beta.tar.xz
 %else
-Release:	1
+Release:	2
 Source0:	http://tukaani.org/xz/%{name}-%{version}.tar.xz
 %endif
 License:	Public Domain
@@ -63,12 +63,14 @@ Group:		System/Libraries
 %description -n	%{libname}
 Libraries for decoding LZMA compression.
 
+%if %{with uclibc}
 %package -n	uclibc-%{libname}
 Summary:	Libraries for decoding XZ/LZMA compression (uClibc build)
 Group:		System/Libraries
 
 %description -n	uclibc-%{libname}
 Libraries for decoding LZMA compression.
+%endif
 
 %package -n	%{libdev}
 Summary:	Devel libraries & headers for liblzma
