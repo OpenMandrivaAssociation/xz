@@ -14,12 +14,13 @@ Version:	5.2.1
 Release:	0.beta.%{gitdate}.1
 Source0:	http://tukaani.org/xz/%{name}-%{version}beta.tar.xz
 %else
-Release:	2
+Release:	3
 Source0:	http://tukaani.org/xz/%{name}-%{version}.tar.xz
 %endif
 License:	Public Domain
 Group:		Archiving/Compression
 Source1:	xzme
+Source2:	%{name}.rpmlintrc
 Patch0:		xz-5.2.0-text-tune.patch
 Patch1:		xz-5.1.3alpha-man-page-day.patch
 %rename		lzma
@@ -70,6 +71,17 @@ Group:		System/Libraries
 
 %description -n	uclibc-%{libname}
 Libraries for decoding LZMA compression.
+
+%package -n	uclibc-%{libdev}
+Summary:	Devel libraries & headers for liblzma
+Group:		Development/C
+Provides:	uclibc-%{lname}-devel = %{EVRD}
+Requires:	%{libdev} = %{EVRD}
+Requires:	uclibc-%{libname} = %{EVRD}
+Conflicts:	%{libdev} < 5.2.1-3
+
+%description -n uclibc-%{libdev}
+Devel libraries & headers for liblzma.
 %endif
 
 %package -n	%{libdev}
@@ -78,9 +90,6 @@ Group:		Development/C
 Provides:	%{lname}-devel = %{version}-%{release}
 Provides:	lib%{lname}-devel = %{version}-%{release}
 Requires:	%{libname} = %{version}
-%if %{with uclibc}
-Requires:	uclibc-%{libname} = %{version}
-%endif
 
 %description -n %{libdev}
 Devel libraries & headers for liblzma.
@@ -176,6 +185,10 @@ make check -C objs
 %if %{with uclibc}
 %files -n uclibc-%{libname}
 %{uclibc_root}/%{_lib}/liblzma.so.%{major}*
+
+%files -n uclibc-%{libdev}
+%{uclibc_root}%{_libdir}/liblzma.a
+%{uclibc_root}%{_libdir}/liblzma.so
 %endif
 
 %files -n %{libdev}
@@ -186,9 +199,5 @@ make check -C objs
 %{_libdir}/liblzma.a
 %if %{with dietlibc}
 %{_prefix}/lib/dietlibc/lib-%{_arch}/liblzma.a
-%endif
-%if %{with uclibc}
-%{uclibc_root}%{_libdir}/liblzma.a
-%{uclibc_root}%{_libdir}/liblzma.so
 %endif
 %{_libdir}/pkgconfig/lib%{lname}.pc
