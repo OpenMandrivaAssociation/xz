@@ -76,6 +76,7 @@ Libraries for decoding LZMA compression.
 Summary:	Devel libraries & headers for liblzma
 Group:		Development/C
 Provides:	uclibc-%{lname}-devel = %{EVRD}
+Provides:	uclibc-%{name}-devel = %{EVRD}
 Requires:	%{libdev} = %{EVRD}
 Requires:	uclibc-%{libname} = %{EVRD}
 Conflicts:	%{libdev} < 5.2.1-3
