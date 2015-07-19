@@ -14,7 +14,7 @@ Version:	5.2.1
 Release:	0.beta.%{gitdate}.1
 Source0:	http://tukaani.org/xz/%{name}-%{version}beta.tar.xz
 %else
-Release:	3
+Release:	4
 Source0:	http://tukaani.org/xz/%{name}-%{version}.tar.xz
 %endif
 License:	Public Domain
