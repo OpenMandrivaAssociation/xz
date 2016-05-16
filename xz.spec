@@ -13,7 +13,7 @@ Release:	0.1
 License:	Public Domain
 Group:		Archiving/Compression
 URL:		http://tukaani.org/xz/
-Source0:	http://tukaani.org/xz/%{name}-%{version}alpha.tar.xz
+Source0:	http://tukaani.org/xz/%{name}-%{version}.tar.xz
 Source1:	xzme
 Patch0:		xz-5.2.0-text-tune.patch
 Patch1:		xz-5.1.3alpha-man-page-day.patch
