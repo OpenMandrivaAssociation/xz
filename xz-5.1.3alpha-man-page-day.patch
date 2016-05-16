@@ -1,0 +1,64 @@
+--- xz-5.1.3alpha/src/xz/message.c.day	2013-10-26 12:27:12.000000000 +0200
++++ xz-5.1.3alpha/src/xz/message.c	2014-02-10 12:58:14.957708913 +0100
+@@ -1090,7 +1090,8 @@ message_help(bool long_help)
+ 
+ 	puts(_(
+ "  -z, --compress      force compression\n"
+-"  -d, --decompress    force decompression\n"
++"  -d, --decompress, --uncompress\n"
++"                      force decompression\n"
+ "  -t, --test          test compressed file integrity\n"
+ "  -l, --list          list information about .xz files"));
+ 
+@@ -1100,7 +1101,8 @@ message_help(bool long_help)
+ 	puts(_(
+ "  -k, --keep          keep (don't delete) input files\n"
+ "  -f, --force         force overwrite of output file and (de)compress links\n"
+-"  -c, --stdout        write to standard output and don't delete input files"));
++"  -c, --stdout, --to-stdout\n"
++"                      write to standard output and don't delete input files"));
+ 
+ 	if (long_help) {
+ 		puts(_(
+@@ -1150,7 +1152,7 @@ message_help(bool long_help)
+ 		puts(_( // xgettext:no-c-format
+ "      --memlimit-compress=LIMIT\n"
+ "      --memlimit-decompress=LIMIT\n"
+-"  -M, --memlimit=LIMIT\n"
++"  -M, --memlimit=LIMIT, (old alias --memory=LIMIT)\n"
+ "                      set memory usage limit for compression, decompression,\n"
+ "                      or both; LIMIT is in bytes, % of RAM, or 0 for defaults"));
+ 
+--- xz-5.1.3alpha/src/xz/xz.1.day	2013-10-26 12:27:12.000000000 +0200
++++ xz-5.1.3alpha/src/xz/xz.1	2014-02-10 12:58:14.957708913 +0100
+@@ -972,7 +972,7 @@ See
+ for possible ways to specify the
+ .IR limit .
+ .TP
+-\fB\-M\fR \fIlimit\fR, \fB\-\-memlimit=\fIlimit\fR, \fB\-\-memory=\fIlimit
++\fB\-M\fR \fIlimit\fR, \fB\-\-memlimit=\fIlimit\fR, (old alias \fB\-\-memory=\fIlimit\fR)
+ This is equivalent to specifying \fB\-\-memlimit\-compress=\fIlimit
+ \fB\-\-memlimit\-decompress=\fIlimit\fR.
+ .TP
+--- xz-5.1.3alpha/src/xzdec/xzdec.c.day	2014-02-10 12:58:14.957708913 +0100
++++ xz-5.1.3alpha/src/xzdec/xzdec.c	2014-02-10 13:02:37.107709989 +0100
+@@ -65,12 +65,16 @@ help(void)
+ "Decompress files in the ." TOOL_FORMAT " format to standard output.\n"
+ "\n"
+ "  -d, --decompress   (ignored, only decompression is supported)\n"
+-"  -k, --keep         (ignored, files are never deleted)\n"
+-"  -c, --stdout       (ignored, output is always written to standard output)\n"
+ "  -q, --quiet        specify *twice* to suppress errors\n"
+-"  -Q, --no-warn      (ignored, the exit status 2 is never used)\n"
+ "  -h, --help         display this help and exit\n"
+ "  -V, --version      display the version number and exit\n"
++"  -c, --stdout, --to-stdout\n"
++"                     ignored, data are always written to standard output\n"
++"  -d, --decompress, --uncompress\n"
++"                     ignored, only decompression is supported\n"
++"  -k, --keep         ignored, we never create/remove any files\n"
++"  -Q, --no-warn      ignored, we never use exit status 2\n"
++
+ "\n"
+ "With no FILE, or when FILE is -, read standard input.\n"
+ "\n"

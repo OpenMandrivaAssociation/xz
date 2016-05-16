@@ -8,15 +8,16 @@
 
 Summary:	XZ utils
 Name:		xz
-Version:	5.1.2
-Release:	0.alpha.3
+Version:	5.2.2
+Release:	0.1
 License:	Public Domain
 Group:		Archiving/Compression
+URL:		http://tukaani.org/xz/
 Source0:	http://tukaani.org/xz/%{name}-%{version}alpha.tar.xz
 Source1:	xzme
-Patch0:		xz-5.1.1alpha-text-tune.patch
-Patch1:		xz-5.1.2alpha-man-page-day.patch
-Patch2:		xz-5.1.2alpha-xzgrep-and-h-option.patch	
+Patch0:		xz-5.2.0-text-tune.patch
+Patch1:		xz-5.1.3alpha-man-page-day.patch
+Patch2:		xz-5.1.2alpha-xzgrep-and-h-option.patch
 %rename		lzma
 %rename		lzma-utils
 # needed by check suite
@@ -27,7 +28,6 @@ BuildRequires:	uClibc-devel
 %if %{with diet}
 BuildRequires:	dietlibc-devel
 %endif
-URL:		http://tukaani.org/xz/
 
 %description
 XZ Utils is free general-purpose data compression software with high
@@ -79,7 +79,7 @@ Requires:	uclibc-%{libname} = %{version}
 Devel libraries & headers for liblzma.
 
 %prep
-%setup -q -n %{name}-%{version}alpha
+%setup -q
 %patch0 -p1 -b .text~
 %patch1 -p1 -b .day
 %patch2 -p1 -b .h
