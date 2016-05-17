@@ -17,7 +17,6 @@ Source0:	http://tukaani.org/xz/%{name}-%{version}.tar.xz
 Source1:	xzme
 Patch0:		xz-5.2.0-text-tune.patch
 Patch1:		xz-5.1.3alpha-man-page-day.patch
-Patch2:		xz-5.1.2alpha-xzgrep-and-h-option.patch
 %rename		lzma
 %rename		lzma-utils
 # needed by check suite
