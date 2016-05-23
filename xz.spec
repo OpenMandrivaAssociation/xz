@@ -3,13 +3,13 @@
 %define libname %mklibname %{lname} %{major}
 %define libdev %mklibname -d %{lname}
 
-%bcond_without uclibc
+%bcond_without uclibc_lib
 %bcond_without dietlibc
 
 Summary:	XZ utils
 Name:		xz
 Version:	5.2.2
-Release:	0.1
+Release:	0.2
 License:	Public Domain
 Group:		Archiving/Compression
 URL:		http://tukaani.org/xz/
@@ -21,7 +21,7 @@ Patch1:		xz-5.1.3alpha-man-page-day.patch
 %rename		lzma-utils
 # needed by check suite
 BuildRequires:	diffutils
-%if %{with uclibc}
+%if %{with uclibc_lib}
 BuildRequires:	uClibc-devel
 %endif
 %if %{with diet}
@@ -70,7 +70,7 @@ Group:		Development/C
 Provides:	%{lname}-devel = %{version}-%{release}
 Provides:	lib%{lname}-devel = %{version}-%{release}
 Requires:	%{libname} = %{version}
-%if %{with uclibc}
+%if %{with uclibc_lib}
 Requires:	uclibc-%{libname} = %{version}
 %endif
 
@@ -86,7 +86,7 @@ Devel libraries & headers for liblzma.
 %build
 export CONFIGURE_TOP="$PWD"
 
-%if %{with uclibc}
+%if %{with uclibc_lib}
 mkdir -p objsuclibc
 pushd objsuclibc
 %uclibc_configure \
@@ -128,7 +128,7 @@ CFLAGS="%{optflags} -Ofast -funroll-loops" \
 popd
 
 %install
-%if %{with uclibc}
+%if %{with uclibc_lib}
 %makeinstall_std -C objsuclibc
 install -d %{buildroot}%{uclibc_root}/%{_lib}
 rm %{buildroot}%{uclibc_root}%{_libdir}/liblzma.so
@@ -163,7 +163,7 @@ make check -C objs
 %files -n %{libname}
 /%{_lib}/liblzma.so.%{major}*
 
-%if %{with uclibc}
+%if %{with uclibc_lib}
 %files -n uclibc-%{libname}
 %{uclibc_root}/%{_lib}/liblzma.so.%{major}*
 %endif
@@ -176,7 +176,7 @@ make check -C objs
 %if %{with dietlibc}
 %{_prefix}/lib/dietlibc/lib-%{_arch}/liblzma.a
 %endif
-%if %{with uclibc}
+%if %{with uclibc_lib}
 %{uclibc_root}%{_libdir}/liblzma.a
 %{uclibc_root}%{_libdir}/liblzma.so
 %endif
