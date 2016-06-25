@@ -3,7 +3,6 @@
 %define libname %mklibname %{lname} %{major}
 %define libdev %mklibname -d %{lname}
 
-%bcond_with uclibc
 %bcond_with dietlibc
 
 Summary:	XZ utils
@@ -14,7 +13,7 @@ Version:	5.2.2
 Release:	0.beta.%{gitdate}.1
 Source0:	http://tukaani.org/xz/%{name}-%{version}beta.tar.xz
 %else
-Release:	1
+Release:	2
 Source0:	http://tukaani.org/xz/%{name}-%{version}.tar.xz
 %endif
 License:	Public Domain
@@ -27,9 +26,6 @@ Patch1:		xz-5.1.3alpha-man-page-day.patch
 %rename		lzma-utils
 # needed by check suite
 BuildRequires:	diffutils
-%if %{with uclibc}
-BuildRequires:	uClibc-devel
-%endif
 %if %{with dietlibc}
 BuildRequires:	dietlibc-devel
 %endif
@@ -64,27 +60,6 @@ Group:		System/Libraries
 %description -n	%{libname}
 Libraries for decoding LZMA compression.
 
-%if %{with uclibc}
-%package -n	uclibc-%{libname}
-Summary:	Libraries for decoding XZ/LZMA compression (uClibc build)
-Group:		System/Libraries
-
-%description -n	uclibc-%{libname}
-Libraries for decoding LZMA compression.
-
-%package -n	uclibc-%{libdev}
-Summary:	Devel libraries & headers for liblzma
-Group:		Development/C
-Provides:	uclibc-%{lname}-devel = %{EVRD}
-Provides:	uclibc-%{name}-devel = %{EVRD}
-Requires:	%{libdev} = %{EVRD}
-Requires:	uclibc-%{libname} = %{EVRD}
-Conflicts:	%{libdev} < 5.2.1-3
-
-%description -n uclibc-%{libdev}
-Devel libraries & headers for liblzma.
-%endif
-
 %package -n	%{libdev}
 Summary:	Devel libraries & headers for liblzma
 Group:		Development/C
@@ -106,23 +81,6 @@ Devel libraries & headers for liblzma.
 
 %build
 export CONFIGURE_TOP="$PWD"
-
-%if %{with uclibc}
-mkdir -p objsuclibc
-pushd objsuclibc
-%uclibc_configure \
-		--enable-shared \
-		--enable-static \
-		--disable-xz \
-		--disable-xzdec \
-		--disable-lzmadec \
-		--disable-lzmainfo \
-		--disable-lzma-links \
-		--disable-scripts
-
-%make
-popd
-%endif
 
 %if %{with dietlibc}
 mkdir -p objsdietlibc
@@ -148,15 +106,6 @@ CFLAGS="%{optflags} -Ofast -funroll-loops" \
 popd
 
 %install
-%if %{with uclibc}
-%makeinstall_std -C objsuclibc
-install -d %{buildroot}%{uclibc_root}/%{_lib}
-rm %{buildroot}%{uclibc_root}%{_libdir}/liblzma.so
-mv %{buildroot}%{uclibc_root}%{_libdir}/liblzma.so.%{major}* %{buildroot}%{uclibc_root}/%{_lib}
-ln -sr %{buildroot}%{uclibc_root}/%{_lib}/liblzma.so.%{major}.* %{buildroot}%{uclibc_root}%{_libdir}/liblzma.so
-rm -r %{buildroot}%{uclibc_root}%{_datadir} %{buildroot}%{uclibc_root}%{_libdir}/pkgconfig
-%endif
-
 %if %{with dietlibc}
 install -D objsdietlibc/src/liblzma/.libs/liblzma.a -D %{buildroot}%{_prefix}/lib/dietlibc/lib-%{_arch}/liblzma.a
 %endif
@@ -182,15 +131,6 @@ make check -C objs
 
 %files -n %{libname}
 /%{_lib}/liblzma.so.%{major}*
-
-%if %{with uclibc}
-%files -n uclibc-%{libname}
-%{uclibc_root}/%{_lib}/liblzma.so.%{major}*
-
-%files -n uclibc-%{libdev}
-%{uclibc_root}%{_libdir}/liblzma.a
-%{uclibc_root}%{_libdir}/liblzma.so
-%endif
 
 %files -n %{libdev}
 %{_includedir}/%{lname}.h
