@@ -13,7 +13,7 @@ Version:	5.2.3
 Release:	0.beta.%{gitdate}.1
 Source0:	http://tukaani.org/xz/%{name}-%{version}beta.tar.xz
 %else
-Release:	2
+Release:	3
 Source0:	http://tukaani.org/xz/%{name}-%{version}.tar.xz
 %endif
 License:	Public Domain
@@ -22,6 +22,10 @@ Source1:	xzme
 Source2:	%{name}.rpmlintrc
 Patch0:		xz-5.2.0-text-tune.patch
 Patch1:		xz-5.1.3alpha-man-page-day.patch
+# (tpg) ClearLinux patches
+Patch2:		default-threading.patch
+Patch3:		io-size.patch
+Patch4:		speedup.patch
 %rename		lzma
 %rename		lzma-utils
 # needed by check suite
@@ -76,8 +80,8 @@ Devel libraries & headers for liblzma.
 %else
 %setup -q
 %endif
-%patch0 -p1 -b .text~
-%patch1 -p1 -b .day~
+
+%apply_patches
 
 %build
 export CONFIGURE_TOP="$PWD"
@@ -100,8 +104,8 @@ popd
 
 mkdir -p objs
 pushd objs
-CFLAGS="%{optflags} -Ofast -funroll-loops" \
-%configure	--enable-static
+%global optflags %{optflags} -Ofast -funroll-loops
+%configure --enable-static
 %make
 popd
 
