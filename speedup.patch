@@ -1,6 +1,7 @@
---- xz-5.1.2alpha/src/liblzma/lz/lz_encoder_mf.c.org	2012-11-13 22:50:25.529647420 -0800
-+++ xz-5.1.2alpha/src/liblzma/lz/lz_encoder_mf.c	2012-11-13 22:55:31.567951801 -0800
-@@ -467,21 +467,22 @@
+diff -Naru xz-5.2.3/src/liblzma/lz/lz_encoder_mf.c xz-5.2.3.tpg/src/liblzma/lz/lz_encoder_mf.c
+--- xz-5.2.3/src/liblzma/lz/lz_encoder_mf.c	2016-12-30 11:08:20.000000000 +0000
++++ xz-5.2.3.tpg/src/liblzma/lz/lz_encoder_mf.c	2017-10-23 15:45:34.970539050 +0000
+@@ -464,22 +464,22 @@
  
  	uint32_t len0 = 0;
  	uint32_t len1 = 0;
@@ -22,10 +23,11 @@
  
 -		const uint8_t *const pb = cur - delta;
 -		uint32_t len = my_min(len0, len1);
- 
+-
  		if (pb[len] == cur[len]) {
- 			while (++len != len_limit)
-@@ -507,11 +508,13 @@
+ 			len = lzma_memcmplen(pb, cur, len + 1, len_limit);
+ 
+@@ -502,11 +502,13 @@
  			ptr1 = pair + 1;
  			cur_match = *ptr1;
  			len1 = len;
