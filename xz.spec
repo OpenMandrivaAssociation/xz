@@ -13,7 +13,7 @@ Version:	5.2.3
 Release:	0.beta.%{gitdate}.1
 Source0:	http://tukaani.org/xz/%{name}-%{version}beta.tar.xz
 %else
-Release:	3
+Release:	4
 Source0:	http://tukaani.org/xz/%{name}-%{version}.tar.xz
 %endif
 License:	Public Domain
@@ -129,7 +129,7 @@ install -m755 %{SOURCE1} -D %{buildroot}%{_bindir}/xzme
 make check -C objs
 
 %files -f %{name}.lang
-%doc README THANKS
+%doc %{_docdir}/%{name}
 %{_bindir}/*
 %{_mandir}/man1/*
 
