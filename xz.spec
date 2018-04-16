@@ -13,7 +13,7 @@ Version:	5.2.3
 Release:	0.beta.%{gitdate}.1
 Source0:	http://tukaani.org/xz/%{name}-%{version}beta.tar.xz
 %else
-Release:	4
+Release:	5
 Source0:	http://tukaani.org/xz/%{name}-%{version}.tar.xz
 %endif
 License:	Public Domain
