@@ -68,7 +68,7 @@ Devel libraries & headers for liblzma.
 %apply_patches
 
 %build
-%global optflags %{optflags} -Ofast -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math
+%global optflags %{optflags} -Ofast -falign-functions=32 -fno-math-errno -fno-trapping-math
 
 %configure --enable-static \
 %ifarch %{ix86} x86_64
@@ -90,7 +90,7 @@ install -m755 %{SOURCE1} -D %{buildroot}%{_bindir}/xzme
 %find_lang %{name}
 
 %check
-make check -C objs
+make check
 
 %files -f %{name}.lang
 %doc %{_docdir}/%{name}
