@@ -3,21 +3,14 @@
 %define libname %mklibname %{lname} %{major}
 %define libdev %mklibname -d %{lname}
 
-%bcond_with dietlibc
-
 Summary:	XZ utils
 Name:		xz
-Version:	5.2.3
-%define	gitdate	%{nil}
-%if "%{gitdate}" != ""
-Release:	0.beta.%{gitdate}.1
-Source0:	http://tukaani.org/xz/%{name}-%{version}beta.tar.xz
-%else
-Release:	5
-Source0:	http://tukaani.org/xz/%{name}-%{version}.tar.xz
-%endif
+Version:	5.2.4
+Release:	1
 License:	Public Domain
 Group:		Archiving/Compression
+URL:		http://tukaani.org/xz/
+Source0:	http://tukaani.org/xz/%{name}-%{version}.tar.xz
 Source1:	xzme
 Source2:	%{name}.rpmlintrc
 Patch0:		xz-5.2.0-text-tune.patch
@@ -30,10 +23,6 @@ Patch4:		speedup.patch
 %rename		lzma-utils
 # needed by check suite
 BuildRequires:	diffutils
-%if %{with dietlibc}
-BuildRequires:	dietlibc-devel
-%endif
-URL:		http://tukaani.org/xz/
 
 %description
 XZ Utils is free general-purpose data compression software with high
@@ -57,64 +46,39 @@ ease viewing, grepping, and comparing compressed files.
 * Emulation of command line tools of LZMA Utils eases transition from LZMA
 Utils to XZ Utils.
 
-%package -n	%{libname}
+%package -n %{libname}
 Summary:	Libraries for decoding XZ/LZMA compression
 Group:		System/Libraries
 
-%description -n	%{libname}
+%description -n %{libname}
 Libraries for decoding LZMA compression.
 
-%package -n	%{libdev}
+%package -n %{libdev}
 Summary:	Devel libraries & headers for liblzma
 Group:		Development/C
-Provides:	%{lname}-devel = %{version}-%{release}
-Provides:	lib%{lname}-devel = %{version}-%{release}
-Requires:	%{libname} = %{version}
+Provides:	%{lname}-devel = %{EVRD}
+Provides:	lib%{lname}-devel = %{EVRD}
+Requires:	%{libname} = %{EVRD}
 
 %description -n %{libdev}
 Devel libraries & headers for liblzma.
 
 %prep
-%if "%{gitdate}" != ""
-%setup -q -n %{name}-%{version}beta
-%else
 %setup -q
-%endif
-
 %apply_patches
 
 %build
-export CONFIGURE_TOP="$PWD"
+%global optflags %{optflags} -Ofast -falign-functions=32 -fno-math-errno -fno-semantic-interposition -fno-trapping-math
 
-%if %{with dietlibc}
-mkdir -p objsdietlibc
-pushd objsdietlibc
-CFLAGS="-Os" CC="diet gcc" \
-%configure	--disable-shared \
-		--enable-static \
-		--disable-xz \
-		--disable-xzdec \
-		--disable-lzmadec \
-		--disable-lzmainfo \
-		--disable-lzma-links \
-		--disable-scripts
-%make
-popd
+%configure --enable-static \
+%ifarch %{ix86} x86_64
+    --enable-assume-ram=1024
 %endif
 
-mkdir -p objs
-pushd objs
-%global optflags %{optflags} -Ofast -funroll-loops
-%configure --enable-static
 %make
-popd
 
 %install
-%if %{with dietlibc}
-install -D objsdietlibc/src/liblzma/.libs/liblzma.a -D %{buildroot}%{_prefix}/lib/dietlibc/lib-%{_arch}/liblzma.a
-%endif
-
-%makeinstall_std -C objs
+%makeinstall_std
 
 install -d %{buildroot}/%{_lib}
 rm %{buildroot}%{_libdir}/liblzma.so
@@ -142,7 +106,4 @@ make check -C objs
 %{_includedir}/%{lname}/*.h
 %{_libdir}/liblzma.so
 %{_libdir}/liblzma.a
-%if %{with dietlibc}
-%{_prefix}/lib/dietlibc/lib-%{_arch}/liblzma.a
-%endif
 %{_libdir}/pkgconfig/lib%{lname}.pc
