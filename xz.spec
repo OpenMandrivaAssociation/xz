@@ -6,7 +6,7 @@
 Summary:	XZ utils
 Name:		xz
 Version:	5.2.4
-Release:	1
+Release:	2
 License:	Public Domain
 Group:		Archiving/Compression
 URL:		http://tukaani.org/xz/
@@ -71,7 +71,7 @@ Devel libraries & headers for liblzma.
 %global optflags %{optflags} -Ofast -falign-functions=32 -fno-math-errno -fno-trapping-math
 
 %configure --enable-static \
-%ifarch %{ix86} x86_64
+%ifarch %{ix86} x86_64 znver1
     --enable-assume-ram=1024
 %endif
 
