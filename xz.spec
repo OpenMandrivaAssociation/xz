@@ -64,21 +64,20 @@ Requires:	%{libname} = %{EVRD}
 Devel libraries & headers for liblzma.
 
 %prep
-%setup -q
-%apply_patches
+%autosetup -p1
 
 %build
-%global optflags %{optflags} -Ofast -falign-functions=32 -fno-math-errno -fno-trapping-math
+%global optflags %{optflags} -O3 -falign-functions=32 -fno-math-errno -fno-trapping-math
 
 %configure --enable-static \
-%ifarch %{ix86} x86_64 znver1
+%ifarch %{ix86} %{x86_64}
     --enable-assume-ram=1024
 %endif
 
-%make
+%make_build
 
 %install
-%makeinstall_std
+%make_install
 
 install -d %{buildroot}/%{_lib}
 rm %{buildroot}%{_libdir}/liblzma.so
