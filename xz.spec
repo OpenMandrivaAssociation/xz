@@ -6,7 +6,7 @@
 Summary:	XZ utils
 Name:		xz
 Version:	5.2.4
-Release:	3
+Release:	4
 License:	Public Domain
 Group:		Archiving/Compression
 URL:		http://tukaani.org/xz/
@@ -19,6 +19,7 @@ Patch1:		xz-5.1.3alpha-man-page-day.patch
 Patch2:		default-threading.patch
 Patch3:		io-size.patch
 Patch4:		speedup.patch
+Patch5:		add-pgo.patch
 %rename		lzma
 %rename		lzma-utils
 # needed by check suite
@@ -74,7 +75,7 @@ Devel libraries & headers for liblzma.
     --enable-assume-ram=1024
 %endif
 
-%make_build
+%make_build pgo-build
 
 %install
 %make_install
