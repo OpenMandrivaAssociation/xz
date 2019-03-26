@@ -19,6 +19,7 @@ Patch1:		xz-5.1.3alpha-man-page-day.patch
 Patch2:		default-threading.patch
 Patch3:		io-size.patch
 Patch4:		speedup.patch
+# (tpg) this works only when __cc is set to clang
 Patch5:		add-pgo.patch
 %rename		lzma
 %rename		lzma-utils
