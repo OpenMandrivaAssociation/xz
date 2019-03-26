@@ -7,8 +7,8 @@ diff -Naur xz-5.2.4/Makefile.am xz-5.2.4.tpg/Makefile.am
  		$(MAKE) VERSION="$$VERSION" dist-gzip
 +
 +PGO_DIR="pgo"
-+PGO_GEN_CFLAGS=-fprofile-generate -fprofile-dir=$(realpath ${PGO_DIR})
-+PGO_USE_CFLAGS=-fprofile-use -fprofile-dir=$(realpath ${PGO_DIR})
++PGO_GEN_CFLAGS=-fprofile-generate -fprofile-dir=`realpath ${PGO_DIR}`
++PGO_USE_CFLAGS=-fprofile-use -fprofile-dir=`realpath ${PGO_DIR}`
 +pgo-build:
 +       $(MKDIR_P) ${PGO_DIR}
 +       $(MAKE) clean
