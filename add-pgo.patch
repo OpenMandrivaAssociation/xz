@@ -8,8 +8,8 @@ diff -Naur xz-5.2.4/Makefile.am xz-5.2.4.tpg/Makefile.am
 +
 +pgo-build:
 +	$(MAKE) clean
-+	find . -type f -name "*.profclangr" -delete ||:
-+	LLVM_PROFILE_FILE="code-%p.profclangr" $(MAKE) check CFLAGS="${CFLAGS} -fprofile-instr-generate" CXXFLAGS="${CXXFLAGS} -fprofile-instr-generate" LDFLAGS="${LDFLAGS} -fprofile-instr-generate"
-+	llvm-profdata merge -output=code.profclangd ./tests/*.profclangr
++	find . -type f -name "*.profile*" -delete ||:
++	LLVM_PROFILE_FILE="xz-%p.profile.d" $(MAKE) check CFLAGS="${CFLAGS} -fprofile-instr-generate" CXXFLAGS="${CXXFLAGS} -fprofile-instr-generate" LDFLAGS="${LDFLAGS} -fprofile-instr-generate"
++	llvm-profdata merge -output=xz.profile ./tests/*.profile.d
 +	$(MAKE) clean
-+	$(MAKE) check CFLAGS="${CFLAGS} -fprofile-instr-use=`realpath $(srcdir)/code.profclangd`" CXXFLAGS="${CXXFLAGS} -fprofile-instr-use=`realpath $(srcdir)/code.profclangd`" LDFLAGS="${LDFLAGS} -fprofile-use"
++	$(MAKE) check CFLAGS="${CFLAGS} -fprofile-instr-use=$(realpath $(srcdir)/xz.profile)" CXXFLAGS="${CXXFLAGS} -fprofile-instr-use=$(realpath $(srcdir)/xz.profile)" LDFLAGS="${LDFLAGS} -fprofile-instr-use=$(realpath $(srcdir)/xz.profile)"
