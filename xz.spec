@@ -20,7 +20,10 @@ Patch2:		default-threading.patch
 Patch3:		io-size.patch
 Patch4:		speedup.patch
 # (tpg) this works only when __cc is set to clang
+# (tpg) enable PGO
+%ifnarch riscv64
 Patch5:		add-pgo.patch
+%endif
 %rename		lzma
 %rename		lzma-utils
 # needed by check suite
@@ -76,7 +79,11 @@ Devel libraries & headers for liblzma.
     --enable-assume-ram=1024
 %endif
 
+%ifnarch riscv64
 %make_build pgo-build
+%else
+%make_build
+%endif
 
 %install
 %make_install
