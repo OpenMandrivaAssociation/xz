@@ -6,7 +6,7 @@
 Summary:	XZ utils
 Name:		xz
 Version:	5.2.4
-Release:	4
+Release:	5
 License:	Public Domain
 Group:		Archiving/Compression
 URL:		http://tukaani.org/xz/
@@ -63,6 +63,7 @@ Summary:	Devel libraries & headers for liblzma
 Group:		Development/C
 Provides:	%{lname}-devel = %{EVRD}
 Provides:	lib%{lname}-devel = %{EVRD}
+Provides:	xz-devel = %{EVRD}
 Requires:	%{libname} = %{EVRD}
 
 %description -n %{libdev}
