@@ -12,4 +12,4 @@ diff -Naur xz-5.2.4/Makefile.am xz-5.2.4.tpg/Makefile.am
 +	LLVM_PROFILE_FILE="xz-%p.profile.d" $(MAKE) check CFLAGS="${CFLAGS} -fprofile-instr-generate" CXXFLAGS="${CXXFLAGS} -fprofile-instr-generate" LDFLAGS="${LDFLAGS} -fprofile-instr-generate"
 +	llvm-profdata merge -output=xz.profile ./tests/*.profile.d
 +	$(MAKE) clean
-+	$(MAKE) check CFLAGS="${CFLAGS} -fprofile-instr-use=$(realpath ${srcdir}/xz.profile)" CXXFLAGS="${CXXFLAGS} -fprofile-instr-use=$(realpath ${srcdir}/xz.profile)" LDFLAGS="${LDFLAGS} -fprofile-instr-use=$(realpath ${srcdir}/xz.profile)"
++	$(MAKE) check CFLAGS="${CFLAGS} -fprofile-instr-use=$(realpath xz.profile)" CXXFLAGS="${CXXFLAGS} -fprofile-instr-use=$(realpath xz.profile)" LDFLAGS="${LDFLAGS} -fprofile-instr-use=$(realpath xz.profile)"
