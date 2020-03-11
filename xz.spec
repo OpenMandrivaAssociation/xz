@@ -6,7 +6,7 @@
 Summary:	XZ utils
 Name:		xz
 Version:	5.2.4
-Release:	5
+Release:	6
 License:	Public Domain
 Group:		Archiving/Compression
 URL:		http://tukaani.org/xz/
@@ -89,11 +89,6 @@ Devel libraries & headers for liblzma.
 %install
 %make_install
 
-install -d %{buildroot}/%{_lib}
-rm %{buildroot}%{_libdir}/liblzma.so
-mv %{buildroot}%{_libdir}/liblzma.so.%{major}* %{buildroot}/%{_lib}
-ln -sr %{buildroot}/%{_lib}/liblzma.so.%{major}.* %{buildroot}%{_libdir}/liblzma.so
-
 install -m755 %{SOURCE1} -D %{buildroot}%{_bindir}/xzme
 
 %find_lang %{name}
@@ -107,7 +102,7 @@ make check
 %{_mandir}/man1/*
 
 %files -n %{libname}
-/%{_lib}/liblzma.so.%{major}*
+%{_libdir}/liblzma.so.%{major}*
 
 %files -n %{libdev}
 %{_includedir}/%{lname}.h
