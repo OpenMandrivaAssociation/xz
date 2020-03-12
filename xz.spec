@@ -3,6 +3,9 @@
 %define libname %mklibname %{lname} %{major}
 %define libdev %mklibname -d %{lname}
 
+# (tpg) enable PGO build
+%bcond_without pgo
+
 Summary:	XZ utils
 Name:		xz
 Version:	5.2.4
@@ -19,11 +22,6 @@ Patch1:		xz-5.1.3alpha-man-page-day.patch
 Patch2:		default-threading.patch
 Patch3:		io-size.patch
 Patch4:		speedup.patch
-# (tpg) this works only when __cc is set to clang
-# (tpg) enable PGO
-%ifnarch riscv64
-Patch5:		add-pgo.patch
-%endif
 %rename		lzma
 %rename		lzma-utils
 # needed by check suite
@@ -75,16 +73,37 @@ Devel libraries & headers for liblzma.
 %build
 %global optflags %{optflags} -O3 -falign-functions=32 -fno-math-errno -fno-trapping-math
 
+%if %{with pgo}
+CFLAGS_PGO="%{optflags} -fprofile-instr-generate" \
+CXXFLAGS_PGO="%{optflags} -fprofile-instr-generate" \
+FFLAGS_PGO="$CFLAGS_PGO" \
+FCFLAGS_PGO="$CFLAGS_PGO" \
+LDFLAGS_PGO="%{ldflags} -fprofile-instr-generate" \
+LLVM_PROFILE_FILE="%{name}-%p.profile.d" \
+LD_LIBRARY_PATH="$(pwd)" \
 %configure --enable-static \
 %ifarch %{ix86} %{x86_64}
     --enable-assume-ram=1024
 %endif
 
-%ifnarch riscv64
-%make_build pgo-build
-%else
 %make_build
+make check
+
+unset LD_LIBRARY_PATH
+unset LLVM_PROFILE_FILE
+llvm-profdata merge --output=%{name}.profile $(find . -type f -name "*.profile.d")
+make clean
+
+CFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
+CXXFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
+LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
 %endif
+%configure --enable-static \
+%ifarch %{ix86} %{x86_64}
+    --enable-assume-ram=1024
+%endif
+
+%make_build
 
 %install
 %make_install
