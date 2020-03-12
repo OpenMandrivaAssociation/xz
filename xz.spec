@@ -90,7 +90,7 @@ LDFLAGS="%{ldflags} -fprofile-instr-generate" \
 
 unset LD_LIBRARY_PATH
 unset LLVM_PROFILE_FILE
-llvm-profdata merge --output=%{name}.profile $(find . -type f -name *.profile.d)
+llvm-profdata merge --output=%{name}.profile $(find . -type f -name "*.profile.d")
 make clean
 
 CFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
