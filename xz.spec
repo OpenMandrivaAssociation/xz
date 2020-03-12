@@ -74,20 +74,19 @@ Devel libraries & headers for liblzma.
 %global optflags %{optflags} -O3 -falign-functions=32 -fno-math-errno -fno-trapping-math
 
 %if %{with pgo}
+export LLVM_PROFILE_FILE="%{name}-%p.profile.d"
+export LD_LIBRARY_PATH="$(pwd)"
 CFLAGS="%{optflags} -fprofile-instr-generate" \
 CXXFLAGS="%{optflags} -fprofile-instr-generate" \
 FFLAGS="$CFLAGS" \
 FCFLAGS="$CFLAGS" \
 LDFLAGS="%{ldflags} -fprofile-instr-generate" \
-LLVM_PROFILE_FILE="%{name}-%p.profile.d" \
-LD_LIBRARY_PATH="$(pwd)" \
 %configure --enable-static \
 %ifarch %{ix86} %{x86_64}
     --enable-assume-ram=1024
 %endif
 
-%make_build
-make check
+%make_build check
 
 unset LD_LIBRARY_PATH
 unset LLVM_PROFILE_FILE
