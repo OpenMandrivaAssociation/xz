@@ -74,11 +74,11 @@ Devel libraries & headers for liblzma.
 %global optflags %{optflags} -O3 -falign-functions=32 -fno-math-errno -fno-trapping-math
 
 %if %{with pgo}
-CFLAGS_PGO="%{optflags} -fprofile-instr-generate" \
-CXXFLAGS_PGO="%{optflags} -fprofile-instr-generate" \
-FFLAGS_PGO="$CFLAGS_PGO" \
-FCFLAGS_PGO="$CFLAGS_PGO" \
-LDFLAGS_PGO="%{ldflags} -fprofile-instr-generate" \
+CFLAGS="%{optflags} -fprofile-instr-generate" \
+CXXFLAGS="%{optflags} -fprofile-instr-generate" \
+FFLAGS="$CFLAGS" \
+FCFLAGS="$CFLAGS" \
+LDFLAGS="%{ldflags} -fprofile-instr-generate" \
 LLVM_PROFILE_FILE="%{name}-%p.profile.d" \
 LD_LIBRARY_PATH="$(pwd)" \
 %configure --enable-static \
