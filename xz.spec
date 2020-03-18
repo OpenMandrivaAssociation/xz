@@ -118,6 +118,8 @@ make check
 %doc %{_docdir}/%{name}
 %{_bindir}/*
 %{_mandir}/man1/*
+%{_mandir}/*/man1/*
+
 
 %files -n %{libname}
 %{_libdir}/liblzma.so.%{major}*
