@@ -8,8 +8,8 @@
 
 Summary:	XZ utils
 Name:		xz
-Version:	5.2.4
-Release:	7
+Version:	5.2.5
+Release:	1
 License:	Public Domain
 Group:		Archiving/Compression
 URL:		http://tukaani.org/xz/
