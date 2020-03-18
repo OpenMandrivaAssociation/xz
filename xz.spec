@@ -8,8 +8,8 @@
 
 Summary:	XZ utils
 Name:		xz
-Version:	5.2.4
-Release:	7
+Version:	5.2.5
+Release:	1
 License:	Public Domain
 Group:		Archiving/Compression
 URL:		http://tukaani.org/xz/
@@ -118,6 +118,8 @@ make check
 %doc %{_docdir}/%{name}
 %{_bindir}/*
 %{_mandir}/man1/*
+%{_mandir}/*/man1/*
+
 
 %files -n %{libname}
 %{_libdir}/liblzma.so.%{major}*
