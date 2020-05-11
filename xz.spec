@@ -1,7 +1,26 @@
+# -fno-lto is a workaround for getting unresolved symbols in
+# the 32-bit x86_64 library with gcc 10.0
+# We add -flto manually for the 64bit builds, so nothing is lost
+%global _disable_lto 1
+%global optflags %{optflags} -O3 -falign-functions=32 -fno-math-errno -fno-trapping-math
+
 %define major 5
 %define lname lzma
 %define libname %mklibname %{lname} %{major}
 %define libdev %mklibname -d %{lname}
+%define libstatic %mklibname -s -d %{lname}
+
+# liblzma is used by libxml, which in turn is used by wine.
+%ifarch %{x86_64}
+%bcond_without compat32
+%else
+%bcond_with compat32
+%endif
+%if %{with compat32}
+%define lib32name lib%{lname}%{major}
+%define dev32name lib%{lname}-devel
+%define static32name lib%{lname}-static-devel
+%endif
 
 # (tpg) enable PGO build
 %bcond_without pgo
@@ -9,7 +28,7 @@
 Summary:	XZ utils
 Name:		xz
 Version:	5.2.5
-Release:	1
+Release:	2
 License:	Public Domain
 Group:		Archiving/Compression
 URL:		http://tukaani.org/xz/
@@ -59,26 +78,76 @@ Libraries for decoding LZMA compression.
 %package -n %{libdev}
 Summary:	Devel libraries & headers for liblzma
 Group:		Development/C
-Provides:	%{lname}-devel = %{EVRD}
-Provides:	lib%{lname}-devel = %{EVRD}
 Provides:	xz-devel = %{EVRD}
 Requires:	%{libname} = %{EVRD}
 
 %description -n %{libdev}
 Devel libraries & headers for liblzma.
 
+%package -n %{libstatic}
+Summary:	Static libraries for liblzma
+Group:		Development/C
+Requires:	%{libdev} = %{EVRD}
+
+%description -n %{libstatic}
+Static libraries for liblzma.
+
+%if %{with compat32}
+%package -n %{lib32name}
+Summary:	Libraries for decoding XZ/LZMA compression (32-bit)
+Group:		System/Libraries
+
+%description -n %{lib32name}
+Libraries for decoding LZMA compression.
+
+%package -n %{dev32name}
+Summary:	Devel libraries & headers for liblzma (32-bit)
+Group:		Development/C
+Requires:	%{lib32name} = %{EVRD}
+Requires:	%{libdev} = %{EVRD}
+
+%description -n %{dev32name}
+Devel libraries & headers for liblzma.
+
+%package -n %{static32name}
+Summary:	Static libraries for liblzma
+Group:		Development/C
+Requires:	%{dev32name} = %{EVRD}
+
+%description -n %{static32name}
+Static libraries for liblzma.
+%endif
+
 %prep
 %autosetup -p1
+%if %{with compat32}
+export CONFIGURE_TOP="`pwd`"
+mkdir build32
+cd build32
+%configure32 \
+	--enable-static \
+	--disable-xz \
+	--disable-xzdec \
+	--disable-lzmadec \
+	--disable-lzmainfo \
+	--enable-assume-ram=1024
+
+%endif
 
 %build
-%global optflags %{optflags} -O3 -falign-functions=32 -fno-math-errno -fno-trapping-math
+%if %{with compat32}
+%make_build -C build32
+%endif
 
+export CONFIGURE_TOP="`pwd`"
+mkdir build
+cd build
 %if %{with pgo}
-CFLAGS_PGO="%{optflags} -fprofile-instr-generate"
-CXXFLAGS_PGO="%{optflags} -fprofile-instr-generate"
+CFLAGS_PGO="%{optflags} -flto -fprofile-instr-generate"
+CXXFLAGS_PGO="%{optflags} -flto -fprofile-instr-generate"
 FFLAGS_PGO="$CFLAGS_PGO"
 FCFLAGS_PGO="$CFLAGS_PGO"
-LDFLAGS_PGO="%{ldflags} -fprofile-instr-generate"
+LDFLAGS_PGO="%{ldflags} -flto -fprofile-instr-generate"
 export LLVM_PROFILE_FILE="%{name}-%p.profile.d"
 export LD_LIBRARY_PATH="$(pwd)"
 %configure --enable-static \
@@ -93,10 +162,9 @@ unset LLVM_PROFILE_FILE
 llvm-profdata merge --output=%{name}.profile $(find . -type f -name "*.profile.d")
 make clean
 
-%make_build check CFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" CXXFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)"
+%make_build check CFLAGS="%{optflags} -flto -fprofile-instr-use=$(realpath %{name}.profile)" CXXFLAGS="%{optflags} -flto -fprofile-instr-use=$(realpath %{name}.profile)" LDFLAGS="%{ldflags} -flto -fprofile-instr-use=$(realpath %{name}.profile)"
 %else
-
-%configure --enable-static \
+CFLAGS="%{optflags} -flto" CXXFLAGS="%{optflags} -flto" %configure --enable-static \
 %ifarch %{ix86} %{x86_64}
     --enable-assume-ram=1024
 %endif
@@ -105,21 +173,26 @@ make clean
 %endif
 
 %install
-%make_install
+%if %{with compat32}
+%make_install -C build32
+%endif
+%make_install -C build
 
 install -m755 %{SOURCE1} -D %{buildroot}%{_bindir}/xzme
 
 %find_lang %{name}
 
 %check
-make check
+%if %{with compat32}
+make check -C build32
+%endif
+make check -C build
 
 %files -f %{name}.lang
 %doc %{_docdir}/%{name}
 %{_bindir}/*
 %{_mandir}/man1/*
 %{_mandir}/*/man1/*
-
 
 %files -n %{libname}
 %{_libdir}/liblzma.so.%{major}*
@@ -129,5 +202,19 @@ make check
 %dir %{_includedir}/%{lname}
 %{_includedir}/%{lname}/*.h
 %{_libdir}/liblzma.so
-%{_libdir}/liblzma.a
 %{_libdir}/pkgconfig/lib%{lname}.pc
+
+%files -n %{libstatic}
+%{_libdir}/liblzma.a
+
+%if %{with compat32}
+%files -n %{lib32name}
+%{_prefix}/lib/liblzma.so.%{major}*
+
+%files -n %{dev32name}
+%{_prefix}/lib/liblzma.so
+%{_prefix}/lib/pkgconfig/lib%{lname}.pc
+
+%files -n %{static32name}
+%{_prefix}/lib/liblzma.a
+%endif
