@@ -192,8 +192,8 @@ make check -C build
 %files -f %{name}.lang
 %doc %{_docdir}/%{name}
 %{_bindir}/*
-%{_mandir}/man1/*
-%{_mandir}/*/man1/*
+%doc %{_mandir}/man1/*
+%doc %{_mandir}/*/man1/*
 
 %files -n %{libname}
 %{_libdir}/liblzma.so.%{major}*
