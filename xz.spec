@@ -23,7 +23,7 @@
 %endif
 
 # (tpg) enable PGO build
-%bcond_without pgo
+%bcond_with pgo
 
 Summary:	XZ utils
 Name:		xz
