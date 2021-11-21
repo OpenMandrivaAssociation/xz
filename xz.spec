@@ -23,12 +23,12 @@
 %endif
 
 # (tpg) enable PGO build
-%bcond_with pgo
+%bcond_without pgo
 
 Summary:	XZ utils
 Name:		xz
 Version:	5.2.5
-Release:	2
+Release:	3
 License:	Public Domain
 Group:		Archiving/Compression
 URL:		http://tukaani.org/xz/
@@ -144,26 +144,23 @@ export CONFIGURE_TOP="$(pwd)"
 mkdir build
 cd build
 %if %{with pgo}
-CFLAGS_PGO="%{optflags} -flto -fprofile-instr-generate"
-CXXFLAGS_PGO="%{optflags} -flto -fprofile-instr-generate"
-FFLAGS_PGO="$CFLAGS_PGO"
-FCFLAGS_PGO="$CFLAGS_PGO"
-LDFLAGS_PGO="%{build_ldflags} -flto -fprofile-instr-generate"
-export LLVM_PROFILE_FILE="%{name}-%p.profile.d"
 export LD_LIBRARY_PATH="$(pwd)"
+CFLAGS="%{optflags} -flto -fprofile-generate" \
+CXXFLAGS="%{optflags} -flto -fprofile-generate" \
+LDFLAGS="%{build_ldflags} -flto -fprofile-generate" \
 %configure --enable-static \
 %ifarch %{ix86} %{x86_64}
     --enable-assume-ram=1024
 %endif
 
-%make_build check CFLAGS="$CFLAGS_PGO" CXXFLAGS="$CXXFLAGS_PGO" LDFLAGS="$LDFLAGS_PGO"
+%make_build check
 
 unset LD_LIBRARY_PATH
-unset LLVM_PROFILE_FILE
-llvm-profdata merge --output=%{name}.profile $(find . -type f -name "*.profile.d")
+llvm-profdata merge --output=%{name}-llvm.profdata $(find . -type f -name "*.profraw")
+PROFDATA="$(realpath %{name}-llvm.profdata)"
 make clean
 
-%make_build check CFLAGS="%{optflags} -flto -fprofile-instr-use=$(realpath %{name}.profile)" CXXFLAGS="%{optflags} -flto -fprofile-instr-use=$(realpath %{name}.profile)" LDFLAGS="%{build_ldflags} -flto -fprofile-instr-use=$(realpath %{name}.profile)"
+%make_build check CFLAGS="%{optflags} -flto -fprofile-use=$PROFDATA" CXXFLAGS="%{optflags} -flto -fprofile-use=$PROFDATA" LDFLAGS="%{build_ldflags} -flto -fprofile-use=$PROFDATA"
 %else
 CFLAGS="%{optflags} -flto" CXXFLAGS="%{optflags} -flto" %configure --enable-static \
 %ifarch %{ix86} %{x86_64}
