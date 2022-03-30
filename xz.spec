@@ -28,12 +28,11 @@
 Summary:	XZ utils
 Name:		xz
 Version:	5.2.5
-Release:	3
+Release:	4
 License:	Public Domain
 Group:		Archiving/Compression
 URL:		http://tukaani.org/xz/
 Source0:	http://tukaani.org/xz/%{name}-%{version}.tar.xz
-Source1:	xzme
 Source2:	%{name}.rpmlintrc
 Patch0:		xz-5.2.0-text-tune.patch
 Patch1:		xz-5.1.3alpha-man-page-day.patch
@@ -175,8 +174,6 @@ CFLAGS="%{optflags} -flto" CXXFLAGS="%{optflags} -flto" %configure --enable-stat
 %make_install -C build32
 %endif
 %make_install -C build
-
-install -m755 %{SOURCE1} -D %{buildroot}%{_bindir}/xzme
 
 %find_lang %{name}
 
