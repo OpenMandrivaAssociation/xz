@@ -29,17 +29,6 @@
  "                      set memory usage limit for compression, decompression,\n"
  "                      or both; LIMIT is in bytes, % of RAM, or 0 for defaults"));
  
---- xz-5.1.3alpha/src/xz/xz.1.day	2013-10-26 12:27:12.000000000 +0200
-+++ xz-5.1.3alpha/src/xz/xz.1	2014-02-10 12:58:14.957708913 +0100
-@@ -972,7 +972,7 @@ See
- for possible ways to specify the
- .IR limit .
- .TP
--\fB\-M\fR \fIlimit\fR, \fB\-\-memlimit=\fIlimit\fR, \fB\-\-memory=\fIlimit
-+\fB\-M\fR \fIlimit\fR, \fB\-\-memlimit=\fIlimit\fR, (old alias \fB\-\-memory=\fIlimit\fR)
- This is equivalent to specifying \fB\-\-memlimit\-compress=\fIlimit
- \fB\-\-memlimit\-decompress=\fIlimit\fR.
- .TP
 --- xz-5.1.3alpha/src/xzdec/xzdec.c.day	2014-02-10 12:58:14.957708913 +0100
 +++ xz-5.1.3alpha/src/xzdec/xzdec.c	2014-02-10 13:02:37.107709989 +0100
 @@ -65,12 +65,16 @@ help(void)
