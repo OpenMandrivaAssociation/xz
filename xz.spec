@@ -44,6 +44,9 @@ Patch4:		speedup.patch
 %rename		lzma-utils
 # needed by check suite
 BuildRequires:	diffutils
+%if %{with compat32}
+BuildRequires:	libc6
+%endif
 
 %description
 XZ Utils is free general-purpose data compression software with high
