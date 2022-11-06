@@ -23,11 +23,11 @@
 %endif
 
 # (tpg) enable PGO build
-%bcond_without pgo
+%bcond_with pgo
 
 Summary:	XZ utils
 Name:		xz
-Version:	5.2.6
+Version:	5.2.7
 Release:	1
 License:	Public Domain
 Group:		Archiving/Compression
@@ -164,7 +164,8 @@ make clean
 
 %make_build check CFLAGS="%{optflags} -flto -fprofile-use=$PROFDATA" CXXFLAGS="%{optflags} -flto -fprofile-use=$PROFDATA" LDFLAGS="%{build_ldflags} -flto -fprofile-use=$PROFDATA"
 %else
-CFLAGS="%{optflags} -flto" CXXFLAGS="%{optflags} -flto" %configure --enable-static \
+# FIXME xz 5.2.7 fails to link with clang 15.0.3
+CC=gcc CXX=g++ CFLAGS="%{optflags} -flto" CXXFLAGS="%{optflags} -flto" %configure --enable-static \
 %ifarch %{ix86} %{x86_64}
     --enable-assume-ram=1024
 %endif
