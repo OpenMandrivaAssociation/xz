@@ -35,7 +35,6 @@ URL:		http://tukaani.org/xz/
 Source0:	http://tukaani.org/xz/%{name}-%{version}.tar.xz
 Source2:	%{name}.rpmlintrc
 Patch0:		xz-5.2.0-text-tune.patch
-Patch1:		xz-5.1.3alpha-man-page-day.patch
 # (tpg) ClearLinux patches
 Patch2:		default-threading.patch
 Patch3:		io-size.patch
