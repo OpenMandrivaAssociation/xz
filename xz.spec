@@ -2,7 +2,7 @@
 # the 32-bit x86_64 library with gcc 10.0
 # We add -flto manually for the 64bit builds, so nothing is lost
 %global _disable_lto 1
-%global optflags %{optflags} -O3 -falign-functions=32 -fno-math-errno -fno-trapping-math
+%global optflags %{optflags} -O3
 
 %define major 5
 %define lname lzma
@@ -23,11 +23,11 @@
 %endif
 
 # (tpg) enable PGO build
-%bcond_with pgo
+%bcond_without pgo
 
 Summary:	XZ utils
 Name:		xz
-Version:	5.2.7
+Version:	5.2.8
 Release:	1
 License:	Public Domain
 Group:		Archiving/Compression
@@ -164,8 +164,7 @@ make clean
 
 %make_build check CFLAGS="%{optflags} -flto -fprofile-use=$PROFDATA" CXXFLAGS="%{optflags} -flto -fprofile-use=$PROFDATA" LDFLAGS="%{build_ldflags} -flto -fprofile-use=$PROFDATA"
 %else
-# FIXME xz 5.2.7 fails to link with clang 15.0.3
-CC=gcc CXX=g++ CFLAGS="%{optflags} -flto" CXXFLAGS="%{optflags} -flto" %configure --enable-static \
+CFLAGS="%{optflags} -flto" CXXFLAGS="%{optflags} -flto" %configure --enable-static \
 %ifarch %{ix86} %{x86_64}
     --enable-assume-ram=1024
 %endif
