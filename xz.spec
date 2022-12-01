@@ -23,11 +23,11 @@
 %endif
 
 # (tpg) enable PGO build
-%bcond_without pgo
+%bcond_with pgo
 
 Summary:	XZ utils
 Name:		xz
-Version:	5.2.8
+Version:	5.2.9
 Release:	1
 License:	Public Domain
 Group:		Archiving/Compression
@@ -142,6 +142,11 @@ cd build32
 %make_build -C build32
 %endif
 
+# (tpg) 2022-12-01 looks like clang can't compile it
+# An email to xz upstream has been sent about the issue
+export CC=gcc
+export CXX=g++
+
 export CONFIGURE_TOP="$(pwd)"
 mkdir build
 cd build
@@ -164,7 +169,7 @@ llvm-profdata merge --output=%{name}-llvm.profdata $(find . -type f -name "*.pro
 PROFDATA="$(realpath %{name}-llvm.profdata)"
 make clean
 
-%make_build check CFLAGS="%{optflags} -flto -fprofile-use=$PROFDATA" CXXFLAGS="%{optflags} -flto -fprofile-use=$PROFDATA" LDFLAGS="%{build_ldflags} -flto -fprofile-use=$PROFDATA"
+%make_build check CFLAGS="%{optflags} -flto -fprofile-use=$PROFDATA" CXXFLAGS="%{optflags} -flto -fprofile-use=$PROFDATA" LDFLAGS="%{build_ldflags} -fprofile-use=$PROFDATA"
 %else
 CFLAGS="%{optflags} -flto" CXXFLAGS="%{optflags} -flto" %configure --enable-static \
 %ifarch %{ix86} %{x86_64}
