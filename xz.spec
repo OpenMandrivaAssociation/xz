@@ -23,12 +23,12 @@
 %endif
 
 # (tpg) enable PGO build
-%bcond_with pgo
+%bcond_without pgo
 
 Summary:	XZ utils
 Name:		xz
 Version:	5.2.9
-Release:	1
+Release:	2
 License:	Public Domain
 Group:		Archiving/Compression
 URL:		http://tukaani.org/xz/
@@ -39,6 +39,8 @@ Patch0:		xz-5.2.0-text-tune.patch
 Patch2:		default-threading.patch
 Patch3:		io-size.patch
 Patch4:		speedup.patch
+# (tpg) patch from upstream to fix build with LLVM/clang
+Patch100:	0001-liblzma-Use-__has_attribute-__symver__-to-fix-Clang-.patch
 %rename		lzma
 %rename		lzma-utils
 # needed by check suite
@@ -141,11 +143,6 @@ cd build32
 %if %{with compat32}
 %make_build -C build32
 %endif
-
-# (tpg) 2022-12-01 looks like clang can't compile it
-# An email to xz upstream has been sent about the issue
-export CC=gcc
-export CXX=g++
 
 export CONFIGURE_TOP="$(pwd)"
 mkdir build
