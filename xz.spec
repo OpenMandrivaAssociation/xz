@@ -27,8 +27,8 @@
 
 Summary:	XZ utils
 Name:		xz
-Version:	5.2.9
-Release:	2
+Version:	5.4.0
+Release:	1
 License:	Public Domain
 Group:		Archiving/Compression
 URL:		http://tukaani.org/xz/
@@ -39,8 +39,6 @@ Patch0:		xz-5.2.0-text-tune.patch
 Patch2:		default-threading.patch
 Patch3:		io-size.patch
 Patch4:		speedup.patch
-# (tpg) patch from upstream to fix build with LLVM/clang
-Patch100:	0001-liblzma-Use-__has_attribute-__symver__-to-fix-Clang-.patch
 %rename		lzma
 %rename		lzma-utils
 # needed by check suite
