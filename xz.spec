@@ -27,7 +27,7 @@
 
 Summary:	XZ utils
 Name:		xz
-Version:	5.4.0
+Version:	5.4.1
 Release:	1
 License:	Public Domain
 Group:		Archiving/Compression
