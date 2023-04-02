@@ -23,7 +23,11 @@
 %endif
 
 # (tpg) enable PGO build
+%if %{cross_compiling}
+%bcond_with pgo
+%else
 %bcond_without pgo
+%endif
 
 Summary:	XZ utils
 Name:		xz
@@ -213,11 +217,13 @@ for i in $(find %{buildroot} -type f -name "*.[ao]"); do
     check_convert_bitcode ${i}
 done
 
+%if ! %{cross_compiling}
 %check
 %if %{with compat32}
 make check -C build32
 %endif
 make check -C build
+%endif
 
 %files -f %{name}.lang
 %doc %{_docdir}/%{name}
