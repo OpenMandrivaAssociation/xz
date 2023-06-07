@@ -32,13 +32,14 @@
 Summary:	XZ utils
 Name:		xz
 Version:	5.4.3
-Release:	1
+Release:	2
 License:	Public Domain
 Group:		Archiving/Compression
 URL:		http://tukaani.org/xz/
 Source0:	http://tukaani.org/xz/%{name}-%{version}.tar.xz
 Source2:	%{name}.rpmlintrc
 Patch0:		xz-5.2.0-text-tune.patch
+Patch1:		xz-5.4.3-no-Lusrlib.patch
 # (tpg) ClearLinux patches
 Patch2:		default-threading.patch
 Patch3:		io-size.patch
@@ -186,36 +187,6 @@ CFLAGS="%{optflags} -flto" CXXFLAGS="%{optflags} -flto" %configure --enable-stat
 %make_install -C build
 
 %find_lang %{name}
-
-# (tpg) strip LTO from "LLVM IR bitcode" files
-check_convert_bitcode() {
-    printf '%s\n' "Checking for LLVM IR bitcode"
-    llvm_file_name=$(realpath ${1})
-    llvm_file_type=$(file ${llvm_file_name})
-
-    if printf '%s\n' "${llvm_file_type}" | grep -q "LLVM IR bitcode"; then
-# recompile without LTO
-    clang %{optflags} -fno-lto -Wno-unused-command-line-argument -x ir ${llvm_file_name} -c -o ${llvm_file_name}
-    elif printf '%s\n' "${llvm_file_type}" | grep -q "current ar archive"; then
-    printf '%s\n' "Unpacking ar archive ${llvm_file_name} to check for LLVM bitcode components."
-# create archive stage for objects
-    archive_stage=$(mktemp -d)
-    archive=${llvm_file_name}
-    cd ${archive_stage}
-    ar x ${archive}
-    for archived_file in $(find -not -type d); do
-        check_convert_bitcode ${archived_file}
-        printf '%s\n' "Repacking ${archived_file} into ${archive}."
-        ar r ${archive} ${archived_file}
-    done
-    ranlib ${archive}
-    cd ..
-    fi
-}
-
-for i in $(find %{buildroot} -type f -name "*.[ao]"); do
-    check_convert_bitcode ${i}
-done
 
 %if ! %{cross_compiling}
 %check
