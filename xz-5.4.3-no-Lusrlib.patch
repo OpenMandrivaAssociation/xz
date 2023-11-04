@@ -1,11 +1,12 @@
-diff -up xz-5.4.3/src/liblzma/liblzma.pc.in.omv~ xz-5.4.3/src/liblzma/liblzma.pc.in
---- xz-5.4.3/src/liblzma/liblzma.pc.in.omv~	2023-06-07 15:19:56.807101982 +0200
-+++ xz-5.4.3/src/liblzma/liblzma.pc.in	2023-06-07 15:20:28.831296177 +0200
-@@ -14,6 +14,5 @@ Name: liblzma
+diff -uraN xz-5.4.5/src/liblzma/liblzma.pc.in omv-xz-5.4.5/src/liblzma/liblzma.pc.in
+--- xz-5.4.5/src/liblzma/liblzma.pc.in	2023-10-31 15:24:02.000000000 +0100
++++ omv-xz-5.4.5/src/liblzma/liblzma.pc.in	2023-11-04 16:16:32.831046549 +0100
+@@ -14,7 +14,6 @@
  Description: General purpose data compression library
  URL: @PACKAGE_URL@
  Version: @PACKAGE_VERSION@
 -Cflags: -I${includedir}
+ Cflags.private: -DLZMA_API_STATIC
 -Libs: -L${libdir} -llzma
 +Libs: -llzma
  Libs.private: @PTHREAD_CFLAGS@ @LIBS@
