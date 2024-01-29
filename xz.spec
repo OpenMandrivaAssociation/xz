@@ -31,12 +31,12 @@
 
 Summary:	XZ utils
 Name:		xz
-Version:	5.4.5
+Version:	5.4.6
 Release:	1
 License:	Public Domain
 Group:		Archiving/Compression
-URL:		http://tukaani.org/xz/
-Source0:	http://tukaani.org/xz/%{name}-%{version}.tar.xz
+URL:		https://tukaani.org/xz/
+Source0:	https://tukaani.org/xz/%{name}-%{version}.tar.xz
 Source2:	%{name}.rpmlintrc
 Patch0:		xz-5.2.0-text-tune.patch
 Patch1:		xz-5.4.3-no-Lusrlib.patch
