@@ -1,6 +1,7 @@
---- xz-5.1.2alpha/src/xz/file_io.h~	2012-07-04 10:51:14.000000000 -0700
-+++ xz-5.1.2alpha/src/xz/file_io.h	2013-01-28 07:40:20.356319426 -0800
-@@ -15,7 +15,7 @@
+diff -up xz-5.6.0/src/xz/file_io.h.4~ xz-5.6.0/src/xz/file_io.h
+--- xz-5.6.0/src/xz/file_io.h.4~	2024-02-24 22:07:35.701771570 +0100
++++ xz-5.6.0/src/xz/file_io.h	2024-02-24 22:08:15.454180611 +0100
+@@ -14,7 +14,7 @@
  #if BUFSIZ <= 1024
  #	define IO_BUFFER_SIZE 8192
  #else
@@ -8,4 +9,4 @@
 +#	define IO_BUFFER_SIZE ((BUFSIZ * 8) & ~7U)
  #endif
  
- 
+ #ifdef _MSC_VER

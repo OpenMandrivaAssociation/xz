@@ -1,6 +1,7 @@
---- xz-5.2.0/src/liblzma/api/lzma/container.h.text~	2014-12-21 19:49:36.000000000 +0100
-+++ xz-5.2.0/src/liblzma/api/lzma/container.h	2014-12-22 11:17:52.108011177 +0100
-@@ -43,7 +43,7 @@
+diff -up xz-5.6.0/src/liblzma/api/lzma/container.h.1~ xz-5.6.0/src/liblzma/api/lzma/container.h
+--- xz-5.6.0/src/liblzma/api/lzma/container.h.1~	2024-02-23 19:36:31.000000000 +0100
++++ xz-5.6.0/src/liblzma/api/lzma/container.h	2024-02-24 22:02:16.378477575 +0100
+@@ -41,7 +41,7 @@
  /*
   * Preset flags
   *
@@ -9,7 +10,7 @@
   */
  
  /**
-@@ -59,6 +59,13 @@
+@@ -57,6 +57,13 @@
   */
  #define LZMA_PRESET_EXTREME       (UINT32_C(1) << 31)
  
@@ -23,8 +24,9 @@
  
  /**
   * \brief       Multithreading options
---- xz-5.2.0/src/liblzma/lzma/lzma_encoder_presets.c.text~	2014-12-21 19:49:36.000000000 +0100
-+++ xz-5.2.0/src/liblzma/lzma/lzma_encoder_presets.c	2014-12-22 11:16:25.754040526 +0100
+diff -up xz-5.6.0/src/liblzma/lzma/lzma_encoder_presets.c.1~ xz-5.6.0/src/liblzma/lzma/lzma_encoder_presets.c
+--- xz-5.6.0/src/liblzma/lzma/lzma_encoder_presets.c.1~	2024-02-23 19:36:31.000000000 +0100
++++ xz-5.6.0/src/liblzma/lzma/lzma_encoder_presets.c	2024-02-24 22:02:16.378477575 +0100
 @@ -18,7 +18,7 @@ lzma_lzma_preset(lzma_options_lzma *opti
  {
  	const uint32_t level = preset & LZMA_PRESET_LEVEL_MASK;
@@ -53,9 +55,10 @@
 +
  	return false;
  }
---- xz-5.2.0/src/xz/args.c.text~	2014-12-21 19:49:36.000000000 +0100
-+++ xz-5.2.0/src/xz/args.c	2014-12-22 11:16:25.754040526 +0100
-@@ -143,6 +143,7 @@ parse_real(args_info *args, int argc, ch
+diff -up xz-5.6.0/src/xz/args.c.1~ xz-5.6.0/src/xz/args.c
+--- xz-5.6.0/src/xz/args.c.1~	2024-02-23 19:36:31.000000000 +0100
++++ xz-5.6.0/src/xz/args.c	2024-02-24 22:07:23.149642375 +0100
+@@ -208,6 +208,7 @@ parse_real(args_info *args, int argc, ch
  		OPT_ROBOT,
  		OPT_FLUSH_TIMEOUT,
  		OPT_IGNORE_CHECK,
@@ -63,16 +66,15 @@
  	};
  
  	static const char short_opts[]
-@@ -185,6 +186,8 @@ parse_real(args_info *args, int argc, ch
+@@ -251,6 +252,7 @@ parse_real(args_info *args, int argc, ch
  		{ "extreme",      no_argument,       NULL,  'e' },
  		{ "fast",         no_argument,       NULL,  '0' },
  		{ "best",         no_argument,       NULL,  '9' },
 +		{ "text",         no_argument,       NULL,  OPT_TEXT },
-+
  
  		// Filters
- 		{ "lzma1",        optional_argument, NULL,  OPT_LZMA1 },
-@@ -497,6 +500,10 @@ parse_real(args_info *args, int argc, ch
+ 		{ "filters",      optional_argument, NULL,  OPT_FILTERS},
+@@ -633,6 +635,10 @@ parse_real(args_info *args, int argc, ch
  					optarg, 0, UINT64_MAX);
  			break;
  
@@ -83,9 +85,10 @@
  		default:
  			message_try_help();
  			tuklib_exit(E_ERROR, E_ERROR, false);
---- xz-5.2.0/src/xz/coder.c.text~	2014-12-21 19:49:36.000000000 +0100
-+++ xz-5.2.0/src/xz/coder.c	2014-12-22 11:16:25.754040526 +0100
-@@ -104,6 +104,15 @@ coder_set_extreme(void)
+diff -up xz-5.6.0/src/xz/coder.c.1~ xz-5.6.0/src/xz/coder.c
+--- xz-5.6.0/src/xz/coder.c.1~	2024-02-23 19:36:31.000000000 +0100
++++ xz-5.6.0/src/xz/coder.c	2024-02-24 22:02:16.378477575 +0100
+@@ -134,6 +134,15 @@ coder_set_extreme(void)
  
  
  extern void
@@ -101,9 +104,10 @@
  coder_add_filter(lzma_vli id, void *options)
  {
  	if (filters_count == LZMA_FILTERS_MAX)
---- xz-5.2.0/src/xz/coder.h.text~	2014-12-21 19:49:36.000000000 +0100
-+++ xz-5.2.0/src/xz/coder.h	2014-12-22 11:16:25.754040526 +0100
-@@ -61,6 +61,9 @@ extern void coder_set_preset(uint32_t ne
+diff -up xz-5.6.0/src/xz/coder.h.1~ xz-5.6.0/src/xz/coder.h
+--- xz-5.6.0/src/xz/coder.h.1~	2024-02-23 19:36:31.000000000 +0100
++++ xz-5.6.0/src/xz/coder.h	2024-02-24 22:02:16.378477575 +0100
+@@ -74,6 +74,9 @@ extern void coder_set_preset(uint32_t ne
  /// Enable extreme mode
  extern void coder_set_extreme(void);
  
