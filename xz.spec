@@ -32,11 +32,11 @@
 Summary:	XZ utils
 Name:		xz
 Version:	5.6.1
-Release:	1
+Release:	2
 License:	Public Domain
 Group:		Archiving/Compression
 URL:		https://tukaani.org/xz/
-Source0:	https://github.com/tukaani-project/xz/releases/download/v%{version}/xz-%{version}.tar.xz
+Source0:	https://github.com/tukaani-project/xz/archive/refs/tags/v%{version}.tar.gz
 Source2:	%{name}.rpmlintrc
 Patch0:		xz-5.2.0-text-tune.patch
 Patch1:		xz-5.4.3-no-Lusrlib.patch
@@ -48,6 +48,7 @@ Patch4:		speedup.patch
 %rename		lzma-utils
 # needed by check suite
 BuildRequires:	diffutils
+BuildRequires:	po4a
 %if %{with compat32}
 BuildRequires:	libc6
 %endif
@@ -126,6 +127,8 @@ Static libraries for liblzma.
 
 %prep
 %autosetup -p1
+
+[ -e configure ] || ./autogen.sh
 
 %if %{with compat32}
 export CONFIGURE_TOP="$(pwd)"
