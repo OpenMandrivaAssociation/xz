@@ -49,6 +49,7 @@ Patch4:		speedup.patch
 # needed by check suite
 BuildRequires:	diffutils
 BuildRequires:	po4a
+BuildRequires:	gettext
 %if %{with compat32}
 BuildRequires:	libc6
 %endif
