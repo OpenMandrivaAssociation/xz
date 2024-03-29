@@ -50,6 +50,7 @@ Patch4:		speedup.patch
 BuildRequires:	diffutils
 BuildRequires:	po4a
 BuildRequires:	gettext
+BuildRequires:	gettext-devel
 %if %{with compat32}
 BuildRequires:	libc6
 %endif
