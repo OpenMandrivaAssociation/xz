@@ -51,6 +51,7 @@ BuildRequires:	diffutils
 BuildRequires:	po4a
 BuildRequires:	gettext
 BuildRequires:	gettext-devel
+BuildRequires:	doxygen
 %if %{with compat32}
 BuildRequires:	libc6
 %endif
