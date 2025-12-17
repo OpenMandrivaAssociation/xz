@@ -31,7 +31,7 @@
 
 Summary:	XZ utils
 Name:		xz
-Version:	5.8.1
+Version:	5.8.2
 Release:	1
 License:	Public Domain
 Group:		Archiving/Compression
