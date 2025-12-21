@@ -47,6 +47,11 @@ Patch4:		speedup.patch
 %rename		lzma
 %rename		lzma-utils
 # needed by check suite
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	diffutils
 BuildRequires:	po4a
 BuildRequires:	gettext
