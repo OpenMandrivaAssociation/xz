@@ -31,15 +31,15 @@
 
 Summary:	XZ utils
 Name:		xz
-Version:	5.8.2
+Version:	5.8.3
 Release:	1
 License:	Public Domain
 Group:		Archiving/Compression
 URL:		https://tukaani.org/xz/
 Source0:	https://github.com/tukaani-project/xz/archive/refs/tags/v%{version}.tar.gz
 Source2:	%{name}.rpmlintrc
-Patch0:		xz-5.2.0-text-tune.patch
-Patch1:		xz-5.4.3-no-Lusrlib.patch
+# dropped (no longer applies): Patch0:		xz-5.2.0-text-tune.patch
+# dropped (no longer applies): Patch1:		xz-5.4.3-no-Lusrlib.patch
 # (tpg) ClearLinux patches
 Patch2:		default-threading.patch
 Patch3:		io-size.patch
