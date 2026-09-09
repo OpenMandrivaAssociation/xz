@@ -32,7 +32,7 @@
 Summary:	XZ utils
 Name:		xz
 Version:	5.8.4
-Release:	1
+Release:	2
 License:	Public Domain
 Group:		Archiving/Compression
 URL:		https://tukaani.org/xz/
@@ -59,6 +59,9 @@ BuildRequires:	gettext-devel
 BuildRequires:	doxygen
 %if %{with compat32}
 BuildRequires:	libc6
+# clang -m32 uses --sysroot /usr/i686-openmandriva-linux-gnu
+BuildRequires:	cross-i686-openmandriva-linux-gnu-libc
+BuildRequires:	cross-i686-openmandriva-linux-gnu-clang
 %endif
 
 %description
