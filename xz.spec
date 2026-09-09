@@ -32,7 +32,7 @@
 Summary:	XZ utils
 Name:		xz
 Version:	5.8.4
-Release:	3
+Release:	4
 License:	Public Domain
 Group:		Archiving/Compression
 URL:		https://tukaani.org/xz/
@@ -145,6 +145,11 @@ Static libraries for liblzma.
 export CONFIGURE_TOP="$(pwd)"
 mkdir build32
 cd build32
+# clang 23 -m32 uses an i686 sysroot; dump a probe so a failure is not just
+# "C compiler cannot create executables"
+rpm -q clang cross-i686-openmandriva-linux-gnu-clang cross-i686-openmandriva-linux-gnu-libc libc6 || :
+ls -ld /usr/i686-openmandriva-linux-gnu /usr/i686-openmandriva-linux-gnu/lib /etc/clang/i386-pc-linux-gnu.cfg || :
+echo 'int main(void){return 0;}' | cc -m32 -v -x c - -o /tmp/t32 || :
 %configure32 \
 	--enable-static \
 	--disable-xz \
@@ -152,7 +157,8 @@ cd build32
 	--disable-lzmadec \
 	--disable-lzmainfo \
 	--enable-assume-ram=1024 \
-	--enable-threads
+	--enable-threads \
+	|| { echo '===== build32/config.log ====='; cat config.log; exit 1; }
 
 %endif
 
