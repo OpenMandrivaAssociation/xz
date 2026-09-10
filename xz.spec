@@ -32,7 +32,7 @@
 Summary:	XZ utils
 Name:		xz
 Version:	5.8.4
-Release:	6
+Release:	7
 License:	Public Domain
 Group:		Archiving/Compression
 URL:		https://tukaani.org/xz/
@@ -59,10 +59,12 @@ BuildRequires:	gettext-devel
 BuildRequires:	doxygen
 %if %{with compat32}
 BuildRequires:	libc6
-# clang -m32 uses --sysroot /usr/i686-openmandriva-linux-gnu
-BuildRequires:	cross-i686-openmandriva-linux-gnu-libc
+BuildRequires:	atomic-devel
 BuildRequires:	cross-i686-openmandriva-linux-gnu-clang
+BuildRequires:	cross-i686-openmandriva-linux-gnu-binutils
 BuildRequires:	cross-i686-openmandriva-linux-gnu-gcc
+BuildRequires:	cross-i686-openmandriva-linux-gnu-libc
+BuildRequires:	cross-i686-openmandriva-linux-gnu-kernel-headers
 %endif
 
 %description
@@ -146,9 +148,6 @@ Static libraries for liblzma.
 export CONFIGURE_TOP="$(pwd)"
 mkdir build32
 cd build32
-export LIBRARY_PATH="/usr/i686-openmandriva-linux-gnu/lib${LIBRARY_PATH:+:$LIBRARY_PATH}"
-rpm -q cross-i686-openmandriva-linux-gnu-gcc || :
-ls -l /usr/i686-openmandriva-linux-gnu/lib/libgcc_s* || :
 %configure32 \
 	--enable-static \
 	--disable-xz \
@@ -156,8 +155,7 @@ ls -l /usr/i686-openmandriva-linux-gnu/lib/libgcc_s* || :
 	--disable-lzmadec \
 	--disable-lzmainfo \
 	--enable-assume-ram=1024 \
-	--enable-threads \
-	|| { echo '===== build32/config.log ====='; cat config.log; exit 1; }
+	--enable-threads
 
 %endif
 
